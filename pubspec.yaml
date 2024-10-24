@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  sqflite: ^2.0.0+4
+  path_provider: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -78,7 +80,6 @@ flutter:
     - assets/susu_uht_ultramilk.png
     - assets/teh_botol_sosro.jpeg
     - assets/tepung_segitiga_biru.jpeg
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
