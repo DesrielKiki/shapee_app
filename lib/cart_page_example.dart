@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:shapee_app/database_helper';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  const CartPage({Key? key}) : super(key: key);
 
   @override
-  State<CartPage> createState() => _CartPageState();
+  _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  // Simulasi daftar produk dalam keranjang
   List<Map<String, dynamic>> cartItems = [];
 
-  void addToCart(String name, String price) {
-    setState(() {
-      cartItems.add({'name': name, 'price': price});
-    });
+  @override
+  void initState() {
+    super.initState();
+    loadCartItems();
   }
 
-  void removeFromCart(int index) {
+  Future<void> loadCartItems() async {
+    List<Map<String, dynamic>> items = await DatabaseHelper().getCartItems();
     setState(() {
-      cartItems.removeAt(index);
+      cartItems = items;
     });
   }
 
@@ -35,28 +36,19 @@ class _CartPageState extends State<CartPage> {
           : ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
+                final item = cartItems[index];
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    title: Text(cartItems[index]['name']),
-                    subtitle: Text(cartItems[index]['price']),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => removeFromCart(index),
+                    title: Text(item['name']),
+                    subtitle: Text('Jumlah: ${item['quantity']}'),
+                    trailing: Text(
+                      'Total: Rp. ${item['totalPrice'].toStringAsFixed(2).replaceAll('.', ',')}',
                     ),
                   ),
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Logika untuk menambah item ke keranjang dapat ditambahkan di sini
-          // Misalnya, menambah produk dengan nama dan harga tertentu
-          addToCart('Contoh Produk', '\$100');
-        },
-        backgroundColor: const Color(0xFF90e0ef),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shapee_app/cart_page_example.dart';
 import 'package:shapee_app/detail_page_example.dart';
 import 'package:shapee_app/product_data.dart';
-import 'detail_page.dart'; // Ganti dengan path yang sesuai
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,8 +62,9 @@ class _HomePageState extends State<HomePage> {
                           image: product['image']!,
                           name: product['name']!,
                           price: product['price']!,
-                          sold: product['sold'] ?? '0',
-                          description: product['description']!,
+                          sold: product['sold'] ?? '0', // Pastikan ini sesuai
+                          description: product['description'] ??
+                              '', // Pastikan ini sesuai
                         ),
                       ),
                     );
