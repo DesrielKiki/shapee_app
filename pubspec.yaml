@@ -75,9 +75,10 @@ flutter:
     - assets/shampoo_pantene.jpeg
     - assets/sosis_sonice.jpg
     - assets/susu_kental_manis_indomilk.jpeg
-    - assets/susu_uht _ultramilk.png
+    - assets/susu_uht_ultramilk.png
     - assets/teh_botol_sosro.jpeg
     - assets/tepung_segitiga_biru.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
