@@ -4,7 +4,7 @@ import 'package:shapee_app/database/helper/helper.dart';
 
 class RoomChatPage extends StatefulWidget {
   final Map<String, dynamic> product;
-  final bool fromListChat; // Menandai dari mana halaman ini dibuka
+  final bool fromListChat;
 
   const RoomChatPage(
       {super.key, required this.product, this.fromListChat = false});
@@ -18,7 +18,6 @@ class _RoomChatPageState extends State<RoomChatPage> {
   final TextEditingController messageController = TextEditingController();
   bool isLoading = true;
 
-  // Daftar template pesan
   final List<String> messageTemplates = [
     "Terima kasih atas informasinya!",
     "Apakah masih tersedia?",
@@ -30,25 +29,21 @@ class _RoomChatPageState extends State<RoomChatPage> {
   @override
   void initState() {
     super.initState();
-    _loadMessages(); // Memuat pesan saat inisialisasi
+    _loadMessages();
   }
 
   Future<void> _loadMessages() async {
-    print('Loading messages for product: ${widget.product['name']}');
     try {
       messages = await DatabaseHelper().getMessages(widget.product['name']);
-      print('Messages loaded: $messages');
-
       if (mounted) {
         setState(() {
-          isLoading = false; // Ubah status loading setelah data dimuat
+          isLoading = false;
         });
       }
     } catch (e) {
-      print('Error loading messages: $e');
       if (mounted) {
         setState(() {
-          isLoading = false; // Ubah status loading jika terjadi error
+          isLoading = false;
         });
       }
     }
@@ -56,34 +51,21 @@ class _RoomChatPageState extends State<RoomChatPage> {
 
   Future<void> _sendMessage(String messageContent) async {
     if (messageContent.isNotEmpty) {
-      print("Sending message: $messageContent");
-      try {
-        await DatabaseHelper()
-            .insertMessage(widget.product['name'], messageContent);
-        messageController.clear();
-        await _loadMessages(); // Refresh the message list
-        print("Messages reloaded after sending.");
-
-        // Auto reply
-        _autoReply(messageContent);
-      } catch (e) {
-        print('Error sending message: $e');
-      }
-    } else {
-      print("Message is empty, not sending.");
+      await DatabaseHelper()
+          .insertMessage(widget.product['name'], messageContent, true);
+      messageController.clear();
+      await _loadMessages();
+      _autoReply(messageContent);
     }
   }
 
   void _autoReply(String userMessage) async {
-    // Simulasi delay untuk auto reply
     await Future.delayed(Duration(seconds: 1));
     String autoReplyMessage =
         "Terima kasih! Kami akan segera menghubungi Anda.";
-    print("Auto replying with: $autoReplyMessage");
-
     await DatabaseHelper()
-        .insertMessage(widget.product['name'], autoReplyMessage);
-    await _loadMessages(); // Refresh the message list setelah auto reply
+        .insertMessage(widget.product['name'], autoReplyMessage, false);
+    await _loadMessages();
   }
 
   @override
@@ -98,7 +80,6 @@ class _RoomChatPageState extends State<RoomChatPage> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // Menampilkan foto produk dan informasi lainnya hanya jika bukan dari ListChatPage
                 if (!widget.fromListChat) ...[
                   Container(
                     padding: const EdgeInsets.all(16.0),
@@ -134,45 +115,58 @@ class _RoomChatPageState extends State<RoomChatPage> {
                     ),
                   ),
                 ],
-                // Tempat untuk tampilan chat
                 Expanded(
                   child: ListView.builder(
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       final message = messages[index];
-                      final isUserMessage =
-                          message['isUser'] == true; // Menandai pesan pengguna
+                      final isUserMessage = message['is_user'] == 1;
+
                       return Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: isUserMessage
-                              ? Colors.lightBlue[100]
-                              : Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: isUserMessage
-                              ? CrossAxisAlignment.end
-                              : CrossAxisAlignment.start,
+                        child: Row(
+                          mainAxisAlignment: isUserMessage
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
                           children: [
-                            Text(
-                              message['message'] ?? 'Pesan Kosong',
-                              style: TextStyle(
-                                color: isUserMessage
-                                    ? Colors.black
-                                    : Colors.black87,
-                                fontWeight: isUserMessage
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width *
+                                    0.75, // 75% max width
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              message['timestamp'] ?? 'Waktu Kosong',
-                              style: TextStyle(
-                                  fontSize: 10, color: Colors.black54),
+                              child: CustomPaint(
+                                painter: ChatBubblePainter(
+                                    isUserMessage: isUserMessage),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: isUserMessage
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        message['message'] ?? 'Pesan Kosong',
+                                        style: TextStyle(
+                                          color: isUserMessage
+                                              ? Colors.black
+                                              : Colors.black87,
+                                          fontWeight: isUserMessage
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        message['timestamp'] ?? 'Waktu Kosong',
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.black54),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -180,10 +174,9 @@ class _RoomChatPageState extends State<RoomChatPage> {
                     },
                   ),
                 ),
-                // Daftar template pesan dalam bentuk Row yang dapat di-scroll
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  height: 50, // Set height untuk container template
+                  height: 50,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -192,14 +185,11 @@ class _RoomChatPageState extends State<RoomChatPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              messageController.text =
-                                  template; // Set template ke TextField
+                              messageController.text = template;
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Colors.grey[200], // Background warna tombol
-                              foregroundColor:
-                                  Colors.black, // Warna teks tombol
+                              backgroundColor: Colors.grey[200],
+                              foregroundColor: Colors.black,
                             ),
                             child:
                                 Text(template, style: TextStyle(fontSize: 12)),
@@ -209,7 +199,6 @@ class _RoomChatPageState extends State<RoomChatPage> {
                     ),
                   ),
                 ),
-                // Input untuk mengirim chat
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -224,8 +213,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
                               borderSide: const BorderSide(color: Colors.grey),
                             ),
                             filled: true,
-                            fillColor:
-                                Colors.grey[200], // Background warna TextField
+                            fillColor: Colors.grey[200],
                           ),
                         ),
                       ),
@@ -239,5 +227,42 @@ class _RoomChatPageState extends State<RoomChatPage> {
               ],
             ),
     );
+  }
+}
+
+class ChatBubblePainter extends CustomPainter {
+  final bool isUserMessage;
+
+  ChatBubblePainter({required this.isUserMessage});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = isUserMessage ? Colors.blue[100]! : Colors.grey[200]!
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    if (isUserMessage) {
+      path.moveTo(10, 0);
+      path.lineTo(size.width, 0);
+      path.lineTo(size.width, size.height);
+      path.lineTo(0, size.height);
+      path.lineTo(0, 10);
+      path.close();
+      } else {
+      path.moveTo(0, 0);
+      path.lineTo(size.width - 10, 0);
+      path.lineTo(size.width, 10);
+      path.lineTo(size.width, size.height);
+      path.lineTo(0, size.height);
+      path.close();
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

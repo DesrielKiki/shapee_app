@@ -19,7 +19,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'cart.db');
+    String path = join(await getDatabasesPath(), 'chat.db');
     return await openDatabase(
       path,
       version: 2, // Pastikan ini sesuai
@@ -39,6 +39,7 @@ class DatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             product_name TEXT,
             message TEXT,
+            is_user INTEGER,  -- Kolom untuk menandai apakah pesan berasal dari pengguna
             timestamp TEXT
           )
         ''');
@@ -46,7 +47,10 @@ class DatabaseHelper {
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await db.execute('''
-            ALTER TABLE cart ADD COLUMN sold INTEGER; // Menambahkan kolom sold saat upgrade
+            ALTER TABLE cart ADD COLUMN sold INTEGER; -- Menambahkan kolom sold saat upgrade
+          ''');
+          await db.execute('''
+            ALTER TABLE chat_history ADD COLUMN is_user INTEGER; -- Menambahkan kolom is_user saat upgrade
           ''');
         }
       },
@@ -56,7 +60,7 @@ class DatabaseHelper {
   /**
    * Cart Data Methods
    */
-  
+
   Future<void> insertCartItem(Map<String, dynamic> cartItem) async {
     final db = await database;
     print('Menyimpan item ke keranjang: $cartItem');
@@ -87,11 +91,13 @@ class DatabaseHelper {
    * Chat History Data Methods
    */
 
-  Future<void> saveChatHistory(String productName, String message) async {
+  Future<void> saveChatHistory(
+      String productName, String message, bool isUser) async {
     final db = await database;
     await db.insert('chat_history', {
       'product_name': productName,
       'message': message,
+      'is_user': isUser ? 1 : 0, // Convert bool to integer
       'timestamp': DateTime.now().toString(),
     });
   }
@@ -111,11 +117,13 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertMessage(String productName, String message) async {
+  Future<void> insertMessage(
+      String productName, String message, bool isUser) async {
     final db = await database;
     await db.insert('chat_history', {
       'product_name': productName,
       'message': message,
+      'is_user': isUser ? 1 : 0, // Convert bool to integer
       'timestamp': DateTime.now().toString(),
     });
   }
