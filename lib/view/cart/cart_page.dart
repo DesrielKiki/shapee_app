@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/database_helper.dart';
-import 'package:shapee_app/database/helper/helper.dart'; // Import Helper class
+import 'package:shapee_app/database/helper/helper.dart'; 
 
 class CartPage extends StatefulWidget {
+  const CartPage({super.key});
+
   @override
   _CartPageState createState() => _CartPageState();
 }
@@ -43,7 +45,7 @@ class _CartPageState extends State<CartPage> {
                   await DatabaseHelper().deleteCartItem(id);
                 }
                 selectedItems.clear();
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); 
                 _loadCartItems();
               },
               child: const Text('Hapus'),
@@ -60,7 +62,7 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text('Keranjang Belanja'),
         actions: [
-          // Menampilkan ikon delete hanya jika ada item yang dipilih
+          
           if (selectedItems.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete),
@@ -69,7 +71,7 @@ class _CartPageState extends State<CartPage> {
         ],
       ),
       body: cartItems.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
                 'Keranjang Anda Kosong',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -105,7 +107,7 @@ class _CartPageState extends State<CartPage> {
                             width: 50,
                             height: 50,
                             child: Image.asset(
-                              item['image'] ?? '', // Ensure image is not null
+                              item['image'] ?? '', 
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -115,24 +117,24 @@ class _CartPageState extends State<CartPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item['name'] ?? 'Tanpa Nama', // Default text if name is null
+                                  item['name'] ?? 'Tanpa Nama', 
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Jumlah: ${item['quantity'] ?? 0} pcs', // Default to 0 if quantity is null
+                                  'Jumlah: ${item['quantity'] ?? 0} pcs', 
                                   style: const TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Harga per pcs: ${Helper.formatCurrency(item['price'] ?? 0.0)}', // Use formatCurrency from Helper
+                                  'Harga per pcs: ${Helper.formatCurrency(item['price'] ?? 0.0)}', 
                                   style: const TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Total: ${Helper.formatCurrency(item['totalPrice'] ?? 0.0)}', // Use formatCurrency from Helper
+                                  'Total: ${Helper.formatCurrency(item['totalPrice'] ?? 0.0)}', 
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.red),
                                 ),

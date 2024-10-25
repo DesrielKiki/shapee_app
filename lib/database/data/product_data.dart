@@ -1,4 +1,3 @@
-// product_list.dart
 class ProductData {
   static final List<Map<String, dynamic>> popularProduct = [
     {
@@ -47,7 +46,7 @@ class ProductData {
       "price": "Rp. 28.000",
       "images": [
         "assets/minyak_goreng_bimoli.jpeg",
-        "assets/minyak_bimoli_2.jpg" // gambar baru ditambahkan
+        "assets/minyak_bimoli_2.jpg"
       ],
       "description":
           "Minyak goreng Bimoli, pilihan terbaik untuk menggoreng dengan hasil yang renyah.",
@@ -58,9 +57,9 @@ class ProductData {
       "price": "Rp. 7.000",
       "images": [
         "assets/sabun_mandi_lifebuoy.jpeg",
-        "assets/sabun_mandi_2.jpg", // gambar baru ditambahkan
-        "assets/sabun_mandi_3.jpg", // gambar baru ditambahkan
-        "assets/sabun_mandi_4.jpeg" // gambar baru ditambahkan
+        "assets/sabun_mandi_2.jpg",
+        "assets/sabun_mandi_3.jpg",
+        "assets/sabun_mandi_4.jpeg"
       ],
       "description":
           "Sabun Lifebuoy memberikan perlindungan dari kuman dengan wangi yang menyegarkan.",
@@ -71,9 +70,9 @@ class ProductData {
       "price": "Rp. 15.000",
       "images": [
         "assets/shampoo_pantene.jpeg",
-        "assets/shampoo_pantene_2.jpg", // gambar baru ditambahkan
-        "assets/shampoo_pantene_3.jpeg", // gambar baru ditambahkan
-        "assets/shampoo_pantene_4.jpg" // gambar baru ditambahkan
+        "assets/shampoo_pantene_2.jpg",
+        "assets/shampoo_pantene_3.jpeg",
+        "assets/shampoo_pantene_4.jpg"
       ],
       "description":
           "Pantene membantu merawat rambut agar tetap sehat dan berkilau.",
@@ -180,10 +179,7 @@ class ProductData {
     {
       "name": "Sosis So Nice",
       "price": "Rp. 15.000",
-      "images": [
-        "assets/sosis_sonice.jpg",
-        "assets/sosis_sonice_sapi.jpeg" // gambar baru ditambahkan
-      ],
+      "images": ["assets/sosis_sonice.jpg", "assets/sosis_sonice_sapi.jpeg"],
       "description":
           "So Nice sosis daging berkualitas dengan rasa gurih dan lezat.",
       "sold": "1100"
@@ -193,7 +189,7 @@ class ProductData {
       "price": "Rp. 8.000",
       "images": [
         "assets/susu_kental_manis_indomilk.jpeg",
-        "assets/susu_kental_manis_coklat.jpeg" // gambar baru ditambahkan
+        "assets/susu_kental_manis_coklat.jpeg"
       ],
       "description":
           "Susu Kental Manis Indomilk untuk tambahan rasa manis pada berbagai olahan.",
@@ -212,10 +208,7 @@ class ProductData {
     {
       "name": "Keju Kraft Cheddar",
       "price": "Rp. 20.000",
-      "images": [
-        "assets/keju_kraft_cheddar.jpeg",
-        "assets/keju_kraft_2.jpg" // gambar baru ditambahkan
-      ],
+      "images": ["assets/keju_kraft_cheddar.jpeg", "assets/keju_kraft_2.jpg"],
       "description":
           "Keju Kraft Cheddar dengan tekstur lembut dan rasa gurih yang nikmat.",
       "sold": "200"

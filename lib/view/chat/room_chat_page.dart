@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/database_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
@@ -17,6 +18,8 @@ class _RoomChatPageState extends State<RoomChatPage> {
   List<Map<String, dynamic>> messages = [];
   final TextEditingController messageController = TextEditingController();
   bool isLoading = true;
+  final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
 
   final List<String> messageTemplates = [
     "Terima kasih atas informasinya!",
@@ -30,6 +33,13 @@ class _RoomChatPageState extends State<RoomChatPage> {
   void initState() {
     super.initState();
     _loadMessages();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadMessages() async {
@@ -38,6 +48,10 @@ class _RoomChatPageState extends State<RoomChatPage> {
       if (mounted) {
         setState(() {
           isLoading = false;
+        });
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
         });
       }
     } catch (e) {
@@ -60,12 +74,18 @@ class _RoomChatPageState extends State<RoomChatPage> {
   }
 
   void _autoReply(String userMessage) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     String autoReplyMessage =
         "Terima kasih! Kami akan segera menghubungi Anda.";
     await DatabaseHelper()
         .insertMessage(widget.product['name'], autoReplyMessage, false);
     await _loadMessages();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
   }
 
   @override
@@ -82,8 +102,8 @@ class _RoomChatPageState extends State<RoomChatPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.blue[300]!, // Warna biru muda
-                    Colors.blue[100]!, // Warna biru lebih terang
+                    Colors.blue[300]!,
+                    Colors.blue[100]!,
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -130,14 +150,15 @@ class _RoomChatPageState extends State<RoomChatPage> {
                   ],
                   Expanded(
                     child: ListView.builder(
+                      controller: _scrollController,
                       itemCount: messages.length,
                       itemBuilder: (context, index) {
                         final message = messages[index];
                         final isUserMessage = message['is_user'] == 1;
 
                         return Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           child: Row(
                             mainAxisAlignment: isUserMessage
                                 ? MainAxisAlignment.end
@@ -145,17 +166,14 @@ class _RoomChatPageState extends State<RoomChatPage> {
                             children: [
                               ConstrainedBox(
                                 constraints: BoxConstraints(
-                                  maxWidth: MediaQuery.of(context).size.width *
-                                      0.75, // 75% max width
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.75,
                                 ),
                                 child: Card(
-                                  // Tambahkan Card di sini
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        15), // Atur radius sudut jika diinginkan
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  elevation:
-                                      3, // Atur elevasi untuk efek bayangan
+                                  elevation: 3,
                                   child: CustomPaint(
                                     painter: ChatBubblePainter(
                                         isUserMessage: isUserMessage),
@@ -178,11 +196,12 @@ class _RoomChatPageState extends State<RoomChatPage> {
                                                   : FontWeight.normal,
                                             ),
                                           ),
-                                          SizedBox(height: 5),
+                                          const SizedBox(height: 5),
                                           Text(
-                                            message['timestamp'] ??
-                                                'Waktu Kosong',
-                                            style: TextStyle(
+                                            Helper.formatTimestamp(
+                                                message['timestamp'] ??
+                                                    'Waktu Kosong'),
+                                            style: const TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.black54),
                                           ),
@@ -217,7 +236,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
                                 foregroundColor: Colors.black,
                               ),
                               child: Text(template,
-                                  style: TextStyle(fontSize: 12)),
+                                  style: const TextStyle(fontSize: 12)),
                             ),
                           );
                         }).toList(),

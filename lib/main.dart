@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/navigation/navigation_page_example.dart';
+import 'package:shapee_app/navigation/navigation_page.dart';
 
 // base color : 0xFF90e0ef
 
@@ -13,13 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: NavigationPage()
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const NavigationPage());
   }
 }
-

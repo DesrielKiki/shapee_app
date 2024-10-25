@@ -1,3 +1,5 @@
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -12,6 +14,7 @@ class DatabaseHelper {
   /**
    * Initialize Database
    */
+
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
@@ -22,7 +25,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'chat.db');
     return await openDatabase(
       path,
-      version: 2, // Pastikan ini sesuai
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE cart(
@@ -97,7 +100,7 @@ class DatabaseHelper {
     await db.insert('chat_history', {
       'product_name': productName,
       'message': message,
-      'is_user': isUser ? 1 : 0, // Convert bool to integer
+      'is_user': isUser ? 1 : 0,
       'timestamp': DateTime.now().toString(),
     });
   }
@@ -113,7 +116,7 @@ class DatabaseHelper {
       'chat_history',
       where: 'product_name = ?',
       whereArgs: [productName],
-      orderBy: 'timestamp ASC', // Mengurutkan berdasarkan waktu
+      orderBy: 'timestamp ASC',
     );
   }
 
@@ -123,8 +126,30 @@ class DatabaseHelper {
     await db.insert('chat_history', {
       'product_name': productName,
       'message': message,
-      'is_user': isUser ? 1 : 0, // Convert bool to integer
+      'is_user': isUser ? 1 : 0,
       'timestamp': DateTime.now().toString(),
     });
+  }
+
+  Future<List<Map<String, dynamic>>> loadGroupedChats() async {
+    List<Map<String, dynamic>> allChats = await getChatHistory();
+
+    Map<String, Map<String, dynamic>> groupedChats = {};
+
+    for (var chat in allChats) {
+      String? productName = chat['product_name'];
+      if (productName != null) {
+        if (!groupedChats.containsKey(productName)) {
+          groupedChats[productName] = chat;
+        } else {
+          if (DateTime.parse(chat['timestamp']).isAfter(
+              DateTime.parse(groupedChats[productName]?['timestamp']))) {
+            groupedChats[productName] = chat;
+          }
+        }
+      }
+    }
+
+    return groupedChats.values.toList();
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/helper.dart';
-import 'package:shapee_app/view/cart_page.dart';
-import 'package:shapee_app/view/detail_page.dart';
-import 'package:shapee_app/view/list_chat_page.dart'; // Import ListChatPage
+import 'package:shapee_app/view/cart/cart_page.dart';
+import 'package:shapee_app/view/detail/detail_page.dart';
+import 'package:shapee_app/view/chat/list_chat_page.dart'; 
 import 'package:shapee_app/database/data/product_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,25 +17,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shapee App'),
-        backgroundColor: const Color(0xFF90e0ef),
+        title: const Text('Shapee App',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 17, 114),)),
+        backgroundColor: const Color.fromARGB(255, 114, 236, 255),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CartPage()),
+                MaterialPageRoute(builder: (context) => const CartPage()),
               );
             },
           ),
           IconButton(
             icon: const Icon(Icons.message),
             onPressed: () {
-              // Navigasi ke ListChatPage saat ikon pesan ditekan
+              
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListChatPage()),
+                MaterialPageRoute(builder: (context) => const ListChatPage()),
               );
             },
           ),
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                 final product = ProductData.popularProduct[index];
                 return GestureDetector(
                   onTap: () {
-                    // Navigasi ke DetailPage saat produk di-tap
+                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                           name: product['name']!,
                           price: product['price']!,
                           sold: int.tryParse(product['sold'].toString()) ??
-                              0, // Konversi menjadi int
+                              0, 
                           description: product['description'] ?? '',
                         ),
                       ),

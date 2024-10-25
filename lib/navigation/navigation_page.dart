@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../view/home_page.dart'; // Ganti dengan path yang sesuai
+import '../view/home/home_page.dart'; // Ganti dengan path yang sesuai
 
 class NavigationPage extends StatelessWidget {
   const NavigationPage({super.key});

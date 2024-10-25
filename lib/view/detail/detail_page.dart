@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/database_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
-import 'package:shapee_app/view/room_chat_page.dart';
+import 'package:shapee_app/view/chat/room_chat_page.dart';
 
 class DetailPage extends StatefulWidget {
   final List<String> images;
@@ -34,18 +34,23 @@ class _DetailPageState extends State<DetailPage> {
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return Container(
               padding: const EdgeInsets.all(16.0),
-              height: 300,
+              height: 400,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'Pilih Jumlah',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -63,7 +68,8 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       Text(
                         '$quantity',
-                        style: const TextStyle(fontSize: 24),
+                        style: const TextStyle(
+                            fontSize: 28, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
                         icon: const Icon(Icons.add),
@@ -80,38 +86,55 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(height: 10),
                   const Text(
                     'Total Harga',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     Helper.formatCurrency(itemPrice * quantity),
-                    style: const TextStyle(fontSize: 24, color: Colors.red),
+                    style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
                   ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: () async {
-                      String firstImage =
-                          widget.images.isNotEmpty ? widget.images[0] : '';
-                      Map<String, dynamic> cartItem = {
-                        'name': widget.name,
-                        'price': itemPrice,
-                        'quantity': quantity,
-                        'totalPrice': itemPrice * quantity,
-                        'image': firstImage,
-                      };
-
-                      await DatabaseHelper().insertCartItem(cartItem);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              '${widget.name} berhasil ditambahkan ke keranjang'),
+                  const SizedBox(height: 16),
+                  // Tombol Full Width
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 182, 0, 254),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      );
+                      ),
+                      onPressed: () async {
+                        String firstImage =
+                            widget.images.isNotEmpty ? widget.images[0] : '';
+                        Map<String, dynamic> cartItem = {
+                          'name': widget.name,
+                          'price': itemPrice,
+                          'quantity': quantity,
+                          'totalPrice': itemPrice * quantity,
+                          'image': firstImage,
+                        };
 
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Tambah ke Keranjang'),
+                        await DatabaseHelper().insertCartItem(cartItem);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                '${widget.name} berhasil ditambahkan ke keranjang'),
+                          ),
+                        );
+
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Tambah ke Keranjang',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -346,7 +369,12 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     onPressed: () {
-                      // Navigasi ke halaman favorit
+                      // Tampilkan Snackbar ketika tombol "Beli Sekarang" ditekan
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${widget.name} berhasil dibeli!'),
+                        ),
+                      );
                     },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
