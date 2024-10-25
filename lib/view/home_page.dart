@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/cart_page.dart';
 import 'package:shapee_app/view/detail_page.dart';
+import 'package:shapee_app/view/list_chat_page.dart'; // Import ListChatPage
 import 'package:shapee_app/database/data/product_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,7 +29,16 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          IconButton(icon: const Icon(Icons.message), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.message),
+            onPressed: () {
+              // Navigasi ke ListChatPage saat ikon pesan ditekan
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ListChatPage()),
+              );
+            },
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -60,13 +70,12 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailPage(
-                          images: List<String>.from(
-                              product['images']), // Mengirim daftar gambar
+                          images: List<String>.from(product['images']),
                           name: product['name']!,
                           price: product['price']!,
-                          sold: product['sold'] ?? '0', // Pastikan ini sesuai
-                          description: product['description'] ??
-                              '', // Pastikan ini sesuai
+                          sold: int.tryParse(product['sold'].toString()) ??
+                              0, // Konversi menjadi int
+                          description: product['description'] ?? '',
                         ),
                       ),
                     );
@@ -87,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                               topRight: Radius.circular(8),
                             ),
                             child: Image.asset(
-                              product['images'][0], // Mengambil gambar pertama
+                              product['images'][0],
                               width: double.infinity,
                               fit: BoxFit.cover,
                             ),
@@ -134,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            )
+            ),
           ],
         ),
       ),

@@ -9,6 +9,9 @@ class DatabaseHelper {
 
   DatabaseHelper._internal();
 
+  /**
+   * Initialize Database
+   */
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
@@ -19,7 +22,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'cart.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2, // Pastikan ini sesuai
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE cart(
@@ -27,17 +30,35 @@ class DatabaseHelper {
             name TEXT,
             price REAL,
             quantity INTEGER,
+            totalPrice REAL, 
             image TEXT
           )
         ''');
+        await db.execute('''
+          CREATE TABLE chat_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            product_name TEXT,
+            message TEXT,
+            timestamp TEXT
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('''
+            ALTER TABLE cart ADD COLUMN sold INTEGER; // Menambahkan kolom sold saat upgrade
+          ''');
+        }
       },
     );
   }
 
+  /**
+   * Cart Data Methods
+   */
+  
   Future<void> insertCartItem(Map<String, dynamic> cartItem) async {
     final db = await database;
-
-    // Cetak data yang akan disimpan
     print('Menyimpan item ke keranjang: $cartItem');
 
     await db.insert(
@@ -60,5 +81,23 @@ class DatabaseHelper {
   Future<void> clearCart() async {
     final db = await database;
     await db.delete('cart');
+  }
+
+  /**
+   * Chat History Data Methods
+   */
+
+  Future<void> saveChatHistory(String productName, String message) async {
+    final db = await database;
+    await db.insert('chat_history', {
+      'product_name': productName,
+      'message': message,
+      'timestamp': DateTime.now().toString(),
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getChatHistory() async {
+    final db = await database;
+    return await db.query('chat_history', orderBy: 'timestamp DESC');
   }
 }

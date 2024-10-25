@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:shapee_app/database/helper/database_helper';
+import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/helper.dart';
+import 'package:shapee_app/view/room_chat_page.dart';
 
 class DetailPage extends StatefulWidget {
-  final List<String> images; // Menggunakan List untuk gambar
+  final List<String> images;
   final String name;
   final String price;
-  final String sold; // Jumlah terjual dalam format String
+  final int sold;
   final String description;
 
   const DetailPage({
     super.key,
-    required this.images, // Gambar sekarang dalam bentuk List
+    required this.images,
     required this.name,
     required this.price,
     required this.sold,
@@ -24,7 +25,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   int quantity = 1;
-  int currentIndex = 0; // Menyimpan indeks gambar saat ini
+  int currentIndex = 0;
 
   void _showBottomSheet(BuildContext context) {
     double itemPrice = double.tryParse(
@@ -79,39 +80,36 @@ class _DetailPageState extends State<DetailPage> {
                   const SizedBox(height: 10),
                   const Text(
                     'Total Harga',
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Rp. ${(itemPrice * quantity).toStringAsFixed(2).replaceAll('.', ',')}',
+                    Helper.formatCurrency(itemPrice * quantity),
                     style: const TextStyle(fontSize: 24, color: Colors.red),
                   ),
                   const Spacer(),
                   ElevatedButton(
                     onPressed: () async {
-                      // Hanya simpan gambar pertama
-                      String firstImage = widget.images.isNotEmpty ? widget.images[0] : '';
-                      
-                      // Cetak gambar yang akan disimpan
-                      print('Gambar yang disimpan: $firstImage');
-
+                      String firstImage =
+                          widget.images.isNotEmpty ? widget.images[0] : '';
                       Map<String, dynamic> cartItem = {
                         'name': widget.name,
-                        'price': itemPrice * quantity,
+                        'price': itemPrice,
                         'quantity': quantity,
-                        'image': firstImage, // Simpan hanya gambar pertama
+                        'totalPrice': itemPrice * quantity,
+                        'image': firstImage,
                       };
 
                       await DatabaseHelper().insertCartItem(cartItem);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${widget.name} berhasil ditambahkan ke keranjang'),
+                          content: Text(
+                              '${widget.name} berhasil ditambahkan ke keranjang'),
                         ),
                       );
 
-                      Navigator.pop(context); // Tutup Bottom Sheet setelah menambahkan ke keranjang
+                      Navigator.pop(context);
                     },
                     child: const Text('Tambah ke Keranjang'),
                   ),
@@ -126,14 +124,14 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Menggunakan NumberFormat untuk memformat jumlah terjual
-    final soldFormatted =
-        NumberFormat('#,###', 'id_ID').format(int.parse(widget.sold));
+    final soldFormatted = Helper.formatSold(widget.sold.toString());
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
-        backgroundColor: const Color(0xFFf53d2d),
+        title: Text(widget.name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
       ),
       body: Column(
         children: [
@@ -144,20 +142,20 @@ class _DetailPageState extends State<DetailPage> {
                 children: [
                   Stack(
                     children: [
-                      Container(
-                        height: 300, // Tinggi tampilan gambar
+                      SizedBox(
+                        height: 300,
                         child: PageView.builder(
-                          itemCount: widget.images.length, // Menggunakan jumlah gambar
+                          itemCount: widget.images.length,
                           itemBuilder: (context, index) {
                             return Image.asset(
-                              widget.images[index], // Mengambil gambar dari daftar
+                              widget.images[index],
                               fit: BoxFit.cover,
                               width: double.infinity,
                             );
                           },
                           onPageChanged: (index) {
                             setState(() {
-                              currentIndex = index; // Mengupdate indeks saat gambar digeser
+                              currentIndex = index;
                             });
                           },
                         ),
@@ -192,7 +190,11 @@ class _DetailPageState extends State<DetailPage> {
                         Row(
                           children: [
                             Text(
-                              'Rp. ${widget.price}',
+                              Helper.formatCurrency(double.tryParse(widget.price
+                                      .replaceAll('Rp. ', '')
+                                      .replaceAll('.', '')
+                                      .trim()) ??
+                                  0),
                               style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -238,22 +240,39 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: const Color(0xFF0096c7),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
                     ),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Fitur "Chat Sekarang" belum tersedia'),
+                      double? price = double.tryParse(
+                        widget.price
+                            .replaceAll('Rp. ', '')
+                            .replaceAll('.', '')
+                            .replaceAll(',', '.')
+                            .trim(),
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RoomChatPage(
+                            product: {
+                              'name': widget.name,
+                              'price': price ?? 0,
+                              'image': widget.images.isNotEmpty
+                                  ? widget.images[0]
+                                  : '',
+                            },
+                          ),
                         ),
                       );
                     },
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.message,
                           color: Colors.white,
@@ -281,7 +300,7 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: const Color(0xFF0096c7),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
@@ -290,17 +309,17 @@ class _DetailPageState extends State<DetailPage> {
                     onPressed: () {
                       _showBottomSheet(context);
                     },
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
-                          Icons.shopping_cart,
+                          Icons.shopping_cart_checkout,
                           color: Colors.white,
                           size: 24,
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Masukkan ke Keranjang',
+                          'ke Keranjang',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -320,25 +339,32 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: const Color(0xFF0096c7),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
                     ),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Fitur "Beli Sekarang" belum tersedia'),
-                        ),
-                      );
+                      // Navigasi ke halaman favorit
                     },
-                    child: const Text(
-                      'Beli Sekarang',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Favorit',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

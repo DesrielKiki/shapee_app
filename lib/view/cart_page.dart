@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper';
+import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/helper.dart'; // Import Helper class
 
 class CartPage extends StatefulWidget {
   @override
@@ -114,8 +115,7 @@ class _CartPageState extends State<CartPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item['name'] ??
-                                      'Tanpa Nama', // Default text if name is null
+                                  item['name'] ?? 'Tanpa Nama', // Default text if name is null
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
@@ -127,12 +127,12 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Harga per pcs: Rp. ${item['price']?.toStringAsFixed(2) ?? '0.00'}', // Handle null price
+                                  'Harga per pcs: ${Helper.formatCurrency(item['price'] ?? 0.0)}', // Use formatCurrency from Helper
                                   style: const TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Total: Rp. ${(item['totalPrice'] ?? 0.0).toStringAsFixed(2)}', // Handle null totalPrice
+                                  'Total: ${Helper.formatCurrency(item['totalPrice'] ?? 0.0)}', // Use formatCurrency from Helper
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.red),
                                 ),
