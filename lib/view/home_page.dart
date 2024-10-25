@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/cart_page_example.dart';
-import 'package:shapee_app/detail_page_example.dart';
-import 'package:shapee_app/product_data.dart';
+import 'package:shapee_app/database/helper/helper.dart';
+import 'package:shapee_app/view/cart_page.dart';
+import 'package:shapee_app/view/detail_page.dart';
+import 'package:shapee_app/database/data/product_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CartPage()),
+                MaterialPageRoute(builder: (context) => CartPage()),
               );
             },
           ),
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailPage(
-                          image: product['image']!,
+                          images: List<String>.from(
+                              product['images']), // Mengirim daftar gambar
                           name: product['name']!,
                           price: product['price']!,
                           sold: product['sold'] ?? '0', // Pastikan ini sesuai
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                               topRight: Radius.circular(8),
                             ),
                             child: Image.asset(
-                              product['image']!,
+                              product['images'][0], // Mengambil gambar pertama
                               width: double.infinity,
                               fit: BoxFit.cover,
                             ),
@@ -118,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Text(
-                                'Terjual: ${ProductData.formatSold(product['sold']!)}',
+                                'Terjual: ${Helper.formatSold(product['sold']!)}',
                                 style: const TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.grey,

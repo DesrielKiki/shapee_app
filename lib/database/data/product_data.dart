@@ -1,10 +1,14 @@
 // product_list.dart
 class ProductData {
-  static final List<Map<String, String>> popularProduct = [
+  static final List<Map<String, dynamic>> popularProduct = [
     {
       "name": "Indomie Goreng",
       "price": "Rp. 3.000",
-      "image": "assets/indomie_goreng.jpeg",
+      "images": [
+        "assets/indomie_goreng.jpeg",
+        "assets/indomie_goreng_siap.png",
+        "assets/indomie_goreng_varian.jpg"
+      ],
       "description":
           "Indomie Goreng adalah produk makanan instan yang terbuat dari bahan-bahan berkualitas tinggi.",
       "sold": "3960000"
@@ -12,7 +16,10 @@ class ProductData {
     {
       "name": "Kopi Kapal Api",
       "price": "Rp. 5.000",
-      "image": "assets/kopi_kapal_api.jpeg",
+      "images": [
+        "assets/kopi_kapal_api.jpeg",
+        "assets/kapal_api_2.jpg",
+      ],
       "description":
           "Kopi Kapal Api, kopi hitam dengan rasa autentik yang dinikmati banyak orang.",
       "sold": "5000"
@@ -20,7 +27,9 @@ class ProductData {
     {
       "name": "Tepung Terigu Segitiga Biru",
       "price": "Rp. 10.000",
-      "image": "assets/tepung_segitiga_biru.jpeg",
+      "images": [
+        "assets/tepung_segitiga_biru.jpeg",
+      ],
       "description":
           "Tepung terigu berkualitas yang cocok untuk semua jenis masakan dan kue.",
       "sold": "12000"
@@ -28,7 +37,7 @@ class ProductData {
     {
       "name": "Gula Pasir Gulaku",
       "price": "Rp. 12.000",
-      "image": "assets/gula_pasir_gulaku.jpeg",
+      "images": ["assets/gula_pasir_gulaku.jpeg", "assets/gulaku_2.jpeg"],
       "description":
           "Gulaku adalah gula pasir berkualitas tinggi yang manis alami.",
       "sold": "300"
@@ -36,7 +45,10 @@ class ProductData {
     {
       "name": "Minyak Goreng Bimoli",
       "price": "Rp. 28.000",
-      "image": "assets/minyak_goreng_bimoli.jpeg",
+      "images": [
+        "assets/minyak_goreng_bimoli.jpeg",
+        "assets/minyak_bimoli_2.jpg" // gambar baru ditambahkan
+      ],
       "description":
           "Minyak goreng Bimoli, pilihan terbaik untuk menggoreng dengan hasil yang renyah.",
       "sold": "15000"
@@ -44,7 +56,12 @@ class ProductData {
     {
       "name": "Sabun Mandi Lifebuoy",
       "price": "Rp. 7.000",
-      "image": "assets/sabun_mandi_lifebuoy.jpeg",
+      "images": [
+        "assets/sabun_mandi_lifebuoy.jpeg",
+        "assets/sabun_mandi_2.jpg", // gambar baru ditambahkan
+        "assets/sabun_mandi_3.jpg", // gambar baru ditambahkan
+        "assets/sabun_mandi_4.jpeg" // gambar baru ditambahkan
+      ],
       "description":
           "Sabun Lifebuoy memberikan perlindungan dari kuman dengan wangi yang menyegarkan.",
       "sold": "800"
@@ -52,7 +69,12 @@ class ProductData {
     {
       "name": "Shampo Pantene",
       "price": "Rp. 15.000",
-      "image": "assets/shampoo_pantene.jpeg",
+      "images": [
+        "assets/shampoo_pantene.jpeg",
+        "assets/shampoo_pantene_2.jpg", // gambar baru ditambahkan
+        "assets/shampoo_pantene_3.jpeg", // gambar baru ditambahkan
+        "assets/shampoo_pantene_4.jpg" // gambar baru ditambahkan
+      ],
       "description":
           "Pantene membantu merawat rambut agar tetap sehat dan berkilau.",
       "sold": "22000"
@@ -60,7 +82,10 @@ class ProductData {
     {
       "name": "Pasta Gigi Pepsodent",
       "price": "Rp. 8.000",
-      "image": "assets/pasta_gigi_pepsodent.jpg",
+      "images": [
+        "assets/pasta_gigi_pepsodent.jpg",
+        "assets/pasta_gigi_2.jpeg",
+      ],
       "description":
           "Pepsodent memberikan perlindungan terbaik untuk gigi dan gusi.",
       "sold": "500"
@@ -68,7 +93,11 @@ class ProductData {
     {
       "name": "Susu UHT Ultra Milk",
       "price": "Rp. 6.000",
-      "image": "assets/susu_uht_ultramilk.png",
+      "images": [
+        "assets/susu_uht_ultramilk.png",
+        "assets/susu_uht_ultamlik_fullcream.jpg",
+        "assets/susu_uht_strawbery.jpeg",
+      ],
       "description":
           "Susu Ultra Milk segar dan bergizi, cocok untuk konsumsi sehari-hari.",
       "sold": "3200"
@@ -76,7 +105,10 @@ class ProductData {
     {
       "name": "Cokelat SilverQueen",
       "price": "Rp. 20.000",
-      "image": "assets/coklat_silverqueen.jpg",
+      "images": [
+        "assets/coklat_silverqueen.jpg",
+        "assets/coklat_silverqueen_white.jpeg"
+      ],
       "description":
           "SilverQueen cokelat premium dengan rasa yang nikmat dan lezat.",
       "sold": "7500"
@@ -84,7 +116,9 @@ class ProductData {
     {
       "name": "Air Mineral Aqua",
       "price": "Rp. 3.500",
-      "image": "assets/air_mineral_aqua.jpg",
+      "images": [
+        "assets/air_mineral_aqua.jpg",
+      ],
       "description":
           "Aqua, air mineral yang bersih dan menyegarkan dari sumber alami.",
       "sold": "25000"
@@ -92,7 +126,9 @@ class ProductData {
     {
       "name": "Teh Botol Sosro",
       "price": "Rp. 4.000",
-      "image": "assets/teh_botol_sosro.jpeg",
+      "images": [
+        "assets/teh_botol_sosro.jpeg",
+      ],
       "description":
           "Teh Botol Sosro, teh manis alami dalam kemasan yang praktis.",
       "sold": "8000"
@@ -100,7 +136,11 @@ class ProductData {
     {
       "name": "Biskuit Roma Kelapa",
       "price": "Rp. 9.000",
-      "image": "assets/biskuit_roma_kelapa.jpg",
+      "images": [
+        "assets/biskuit_roma_kelapa.jpg",
+        "assets/biskuit_roma_cream.jpg",
+        "assets/biskuit_roma_coklat.jpg"
+      ],
       "description":
           "Biskuit Roma Kelapa dengan rasa kelapa gurih yang cocok sebagai cemilan.",
       "sold": "220"
@@ -108,7 +148,9 @@ class ProductData {
     {
       "name": "Mi Sedap Ayam Bawang",
       "price": "Rp. 2.800",
-      "image": "assets/mie_sedap_ayam_bawang.jpg",
+      "images": [
+        "assets/mie_sedap_ayam_bawang.jpg",
+      ],
       "description":
           "Mi instan dengan rasa ayam bawang yang nikmat dan kaya akan rempah.",
       "sold": "150"
@@ -116,7 +158,9 @@ class ProductData {
     {
       "name": "Kecap Manis ABC",
       "price": "Rp. 7.000",
-      "image": "assets/kecap_manis_abc.jpeg",
+      "images": [
+        "assets/kecap_manis_abc.jpeg",
+      ],
       "description":
           "Kecap Manis ABC memberikan cita rasa manis yang pas untuk berbagai masakan.",
       "sold": "19000"
@@ -124,7 +168,11 @@ class ProductData {
     {
       "name": "Sari Roti Tawar",
       "price": "Rp. 13.000",
-      "image": "assets/sari_roti_tawar.jpeg",
+      "images": [
+        "assets/sari_roti_tawar.jpeg",
+        "assets/roti_tawar_gandum.jpeg",
+        "assets/roti_tawar_double_soft.png"
+      ],
       "description":
           "Sari Roti tawar yang lembut dan cocok untuk berbagai macam olahan roti.",
       "sold": "120"
@@ -132,7 +180,10 @@ class ProductData {
     {
       "name": "Sosis So Nice",
       "price": "Rp. 15.000",
-      "image": "assets/sosis_sonice.jpg",
+      "images": [
+        "assets/sosis_sonice.jpg",
+        "assets/sosis_sonice_sapi.jpeg" // gambar baru ditambahkan
+      ],
       "description":
           "So Nice sosis daging berkualitas dengan rasa gurih dan lezat.",
       "sold": "1100"
@@ -140,7 +191,10 @@ class ProductData {
     {
       "name": "Susu Kental Manis Indomilk",
       "price": "Rp. 8.000",
-      "image": "assets/susu_kental_manis_indomilk.jpeg",
+      "images": [
+        "assets/susu_kental_manis_indomilk.jpeg",
+        "assets/susu_kental_manis_coklat.jpeg" // gambar baru ditambahkan
+      ],
       "description":
           "Susu Kental Manis Indomilk untuk tambahan rasa manis pada berbagai olahan.",
       "sold": "950"
@@ -148,7 +202,9 @@ class ProductData {
     {
       "name": "Coca Cola 1L",
       "price": "Rp. 9.000",
-      "image": "assets/coca_cola_1liter.jpg",
+      "images": [
+        "assets/coca_cola_1liter.jpg",
+      ],
       "description":
           "Coca Cola, minuman bersoda dengan rasa klasik yang menyegarkan.",
       "sold": "2400"
@@ -156,28 +212,13 @@ class ProductData {
     {
       "name": "Keju Kraft Cheddar",
       "price": "Rp. 20.000",
-      "image": "assets/keju_kraft_cheddar.jpeg",
+      "images": [
+        "assets/keju_kraft_cheddar.jpeg",
+        "assets/keju_kraft_2.jpg" // gambar baru ditambahkan
+      ],
       "description":
           "Keju Kraft Cheddar dengan tekstur lembut dan rasa gurih yang nikmat.",
       "sold": "200"
     },
   ];
-
-  static String formatSold(String sold) {
-    // Mengkonversi string ke integer
-    final soldInt = int.tryParse(sold) ?? 0;
-
-    if (soldInt >= 1000000000) {
-      // Miliar
-      return '${(soldInt / 1000000000).floor()}.${((soldInt % 1000000000) / 100000000).floor()}jt'; // Misal 1,0jt
-    } else if (soldInt >= 1000000) {
-      // Juta
-      return '${(soldInt / 1000000).floor()}.${((soldInt % 1000000) / 100000).floor()}jt'; // Misal 1,8jt
-    } else if (soldInt >= 1000) {
-      // Ribu
-      return '${(soldInt / 1000).floor()}rb'; // Ribu
-    } else {
-      return sold; // Tampilkan angka asli
-    }
-  }
 }

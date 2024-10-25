@@ -3,42 +3,46 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() => _instance;
   static Database? _database;
+
+  factory DatabaseHelper() => _instance;
 
   DatabaseHelper._internal();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDb();
+    _database = await _initDatabase();
     return _database!;
   }
 
-  Future<Database> _initDb() async {
-    String path = join(await getDatabasesPath(), 'shopping_cart.db');
+  Future<Database> _initDatabase() async {
+    String path = join(await getDatabasesPath(), 'cart.db');
     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
-        // Buat tabel cart dengan kolom yang diperlukan
         await db.execute('''
-          CREATE TABLE cart (
+          CREATE TABLE cart(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            price REAL NOT NULL,
-            quantity INTEGER NOT NULL,
-            totalPrice REAL NOT NULL
+            name TEXT,
+            price REAL,
+            quantity INTEGER,
+            image TEXT
           )
         ''');
       },
     );
   }
 
-  Future<void> insertCartItem(Map<String, dynamic> item) async {
+  Future<void> insertCartItem(Map<String, dynamic> cartItem) async {
     final db = await database;
+
+    // Cetak data yang akan disimpan
+    print('Menyimpan item ke keranjang: $cartItem');
+
     await db.insert(
       'cart',
-      item,
+      cartItem,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -48,23 +52,9 @@ class DatabaseHelper {
     return await db.query('cart');
   }
 
-  Future<void> updateCartItem(int id, Map<String, dynamic> item) async {
-    final db = await database;
-    await db.update(
-      'cart',
-      item,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
   Future<void> deleteCartItem(int id) async {
     final db = await database;
-    await db.delete(
-      'cart',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('cart', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> clearCart() async {

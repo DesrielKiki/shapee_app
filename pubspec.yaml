@@ -31,6 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.0.0+4
+  intl: ^0.18.1 # Versi terbaru pada saat ini, periksa untuk versi terbaru
+
   path_provider: ^2.0.0
   path: ^1.8.0
 
@@ -81,6 +83,30 @@ flutter:
     - assets/susu_uht_ultramilk.png
     - assets/teh_botol_sosro.jpeg
     - assets/tepung_segitiga_biru.jpeg
+    - assets/indomie_goreng_siap.png
+    
+    - assets/indomie_goreng_varian.jpg
+    - assets/susu_uht_strawbery.jpeg
+    - assets/susu_uht_ultamlik_fullcream.jpg
+    - assets/susu_kental_manis_coklat.jpeg
+    - assets/sosis_sonice_sapi.jpeg
+    - assets/shampoo_pantene_4.jpg
+    - assets/shampoo_pantene_3.jpeg
+    - assets/shampoo_pantene_2.jpg
+    - assets/sabun_mandi_4.jpeg
+    - assets/sabun_mandi_3.jpg
+    - assets/sabun_mandi_2.jpg
+    - assets/roti_tawar_gandum.jpeg
+    - assets/roti_tawar_double_soft.png
+    - assets/pasta_gigi_2.jpeg
+    - assets/minyak_bimoli_2.jpg
+    - assets/keju_kraft_2.jpg
+    - assets/kapal_api_2.jpg
+    - assets/indomie_goreng_varian.jpg
+    - assets/gulaku_2.jpeg
+    - assets/coklat_silverqueen_white.jpeg
+    - assets/biskuit_roma_cream.jpg
+    - assets/biskuit_roma_coklat.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
