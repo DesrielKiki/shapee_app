@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "Produk tidak ditemukan",
                         style: TextStyle(
-                          fontSize: 24.0, // Ukuran font lebih besar
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
                         ),
