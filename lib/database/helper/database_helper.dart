@@ -100,4 +100,23 @@ class DatabaseHelper {
     final db = await database;
     return await db.query('chat_history', orderBy: 'timestamp DESC');
   }
+
+  Future<List<Map<String, dynamic>>> getMessages(String productName) async {
+    final db = await database;
+    return await db.query(
+      'chat_history',
+      where: 'product_name = ?',
+      whereArgs: [productName],
+      orderBy: 'timestamp ASC', // Mengurutkan berdasarkan waktu
+    );
+  }
+
+  Future<void> insertMessage(String productName, String message) async {
+    final db = await database;
+    await db.insert('chat_history', {
+      'product_name': productName,
+      'message': message,
+      'timestamp': DateTime.now().toString(),
+    });
+  }
 }
