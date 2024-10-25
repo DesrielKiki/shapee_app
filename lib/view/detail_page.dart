@@ -339,7 +339,7 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0096c7),
+                      backgroundColor: const Color.fromARGB(255, 182, 0, 254),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
@@ -351,14 +351,9 @@ class _DetailPageState extends State<DetailPage> {
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.star,
-                          color: Colors.white,
-                          size: 24,
-                        ),
                         SizedBox(height: 4),
                         Text(
-                          'Favorit',
+                          'Beli Sekarang',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,

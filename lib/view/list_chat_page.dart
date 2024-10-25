@@ -19,7 +19,8 @@ class _ListChatPageState extends State<ListChatPage> {
   }
 
   Future<void> _loadChats() async {
-    List<Map<String, dynamic>> allChats = await DatabaseHelper().getChatHistory();
+    List<Map<String, dynamic>> allChats =
+        await DatabaseHelper().getChatHistory();
     print('All Chats: $allChats'); // Log untuk debug
 
     Map<String, Map<String, dynamic>> groupedChats = {};
@@ -32,7 +33,8 @@ class _ListChatPageState extends State<ListChatPage> {
           groupedChats[productName] = chat;
         } else {
           // Jika produk sudah ada, bandingkan waktu dan ambil yang terbaru
-          if (DateTime.parse(chat['timestamp']).isAfter(DateTime.parse(groupedChats[productName]?['timestamp']))) {
+          if (DateTime.parse(chat['timestamp']).isAfter(
+              DateTime.parse(groupedChats[productName]?['timestamp']))) {
             groupedChats[productName] = chat;
           }
         }
@@ -55,25 +57,36 @@ class _ListChatPageState extends State<ListChatPage> {
           : ListView.builder(
               itemCount: chats.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(chats[index]['product_name'] ?? 'Nama Produk Kosong'),
-                  subtitle: Text(chats[index]['message'] ?? 'Tidak ada pesan'),
-                  onTap: () {
-                    // Memanggil RoomChatPage dengan data yang sesuai
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RoomChatPage(
-                          product: {
-                            'name': chats[index]['product_name'] ?? 'Nama Produk Kosong',
-                            'image': chats[index]['image'] ?? 'path/to/default/image.png', // Ganti dengan default image jika null
-                            'price': chats[index]['price'] ?? 0.0, // Ganti dengan nilai default jika null
-                          },
-                          fromListChat: true, // Menandai bahwa ini dibuka dari ListChatPage
-                        ),
-                      ),
-                    ).then((_) => _loadChats()); // Refresh setelah kembali
-                  },
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                          chats[index]['product_name'] ?? 'Nama Produk Kosong'),
+                      subtitle:
+                          Text(chats[index]['message'] ?? 'Tidak ada pesan'),
+                      onTap: () {
+                        // Memanggil RoomChatPage dengan data yang sesuai
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RoomChatPage(
+                              product: {
+                                'name': chats[index]['product_name'] ??
+                                    'Nama Produk Kosong',
+                                'image': chats[index]['image'] ??
+                                    'path/to/default/image.png', // Ganti dengan default image jika null
+                                'price': chats[index]['price'] ??
+                                    0.0, // Ganti dengan nilai default jika null
+                              },
+                              fromListChat:
+                                  true, // Menandai bahwa ini dibuka dari ListChatPage
+                            ),
+                          ),
+                        ).then((_) => _loadChats()); // Refresh setelah kembali
+                      },
+                    ),
+                    const Divider(), // Menambahkan garis pemisah di bawah item
+                  ],
                 );
               },
             ),
