@@ -55,7 +55,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         Text('Jumlah: ${item['quantity']}'),
                         Text(
                             'Total: ${Helper.formatCurrency(item['total_price'])}'),
-                        Text('Tanggal: ${item['purchase_date']}'),
+                        Text(
+                            'Tanggal: ${Helper.formatDate(item['purchase_date'])}'),
                       ],
                     ),
                   ),

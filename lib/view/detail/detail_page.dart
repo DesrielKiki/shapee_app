@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/chat/room_chat_page.dart';
+import 'package:shapee_app/view/detail/detail_bottom_sheet.dart';
 
 class DetailPage extends StatefulWidget {
   final List<String> images;
@@ -27,129 +27,14 @@ class _DetailPageState extends State<DetailPage> {
   int quantity = 1;
   int currentIndex = 0;
 
-  void _showBottomSheet(BuildContext context) {
-    double itemPrice = double.tryParse(
-            widget.price.replaceAll('Rp. ', '').replaceAll('.', '').trim()) ??
-        0;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Container(
-              padding: const EdgeInsets.all(16.0),
-              height: 400,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Pilih Jumlah',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () {
-                          if (quantity > 1) {
-                            setState(() {
-                              quantity--;
-                            });
-                          }
-                        },
-                      ),
-                      Text(
-                        '$quantity',
-                        style: const TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Divider(thickness: 1, color: Colors.grey),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Total Harga',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    Helper.formatCurrency(itemPrice * quantity),
-                    style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  ),
-                  const SizedBox(height: 16),
-                  // Tombol Full Width
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 182, 0, 254),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () async {
-                        String firstImage =
-                            widget.images.isNotEmpty ? widget.images[0] : '';
-                        Map<String, dynamic> cartItem = {
-                          'name': widget.name,
-                          'price': itemPrice,
-                          'quantity': quantity,
-                          'totalPrice': itemPrice * quantity,
-                          'image': firstImage,
-                        };
-
-                        await DatabaseHelper().insertCartItem(cartItem);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                '${widget.name} berhasil ditambahkan ke keranjang'),
-                          ),
-                        );
-
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Tambah ke Keranjang',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final soldFormatted = Helper.formatSold(widget.sold.toString());
 
     return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // Menghindari bottom sheet tertutup oleh keyboard
+
       appBar: AppBar(
         title: Text(widget.name,
             style: const TextStyle(
@@ -330,7 +215,15 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     onPressed: () {
-                      _showBottomSheet(context);
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => CartAndPurchaseBottomSheet(
+                          name: widget.name,
+                          price: widget.price,
+                          images: widget.images,
+                          isForPurchase: false,
+                        ),
+                      );
                     },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -368,33 +261,14 @@ class _DetailPageState extends State<DetailPage> {
                         borderRadius: BorderRadius.circular(0),
                       ),
                     ),
-                    onPressed: () async {
-                      String firstImage =
-                          widget.images.isNotEmpty ? widget.images[0] : '';
-                      double itemPrice = double.tryParse(widget.price
-                              .replaceAll('Rp. ', '')
-                              .replaceAll('.', '')
-                              .trim()) ??
-                          0;
-
-                      // Buat data purchase history
-                      Map<String, dynamic> purchaseHistory = {
-                        'product_name': widget.name,
-                        'quantity': quantity,
-                        'total_price': itemPrice * quantity,
-                        'image': firstImage,
-                        'purchase_date': DateTime.now()
-                            .toIso8601String(), // Menyimpan tanggal dan waktu
-                      };
-
-                      // Simpan ke database
-                      await DatabaseHelper()
-                          .insertPurchaseHistory(purchaseHistory);
-
-                      // Tampilkan Snackbar ketika tombol "Beli Sekarang" ditekan
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${widget.name} berhasil dibeli!'),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => CartAndPurchaseBottomSheet(
+                          name: widget.name,
+                          price: widget.price,
+                          images: widget.images,
+                          isForPurchase: true,
                         ),
                       );
                     },

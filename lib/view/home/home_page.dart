@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.grey,
                 size: 24,
               ),
-              hintText: 'Cari produk...',
+              hintText: 'Cari produk . . .',
               border: InputBorder.none,
               hintStyle: TextStyle(color: Colors.grey),
               contentPadding: EdgeInsets.only(left: -10, top: 10, bottom: 9),
