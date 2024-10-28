@@ -36,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
@@ -368,7 +368,29 @@ class _DetailPageState extends State<DetailPage> {
                         borderRadius: BorderRadius.circular(0),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      String firstImage =
+                          widget.images.isNotEmpty ? widget.images[0] : '';
+                      double itemPrice = double.tryParse(widget.price
+                              .replaceAll('Rp. ', '')
+                              .replaceAll('.', '')
+                              .trim()) ??
+                          0;
+
+                      // Buat data purchase history
+                      Map<String, dynamic> purchaseHistory = {
+                        'product_name': widget.name,
+                        'quantity': quantity,
+                        'total_price': itemPrice * quantity,
+                        'image': firstImage,
+                        'purchase_date': DateTime.now()
+                            .toIso8601String(), // Menyimpan tanggal dan waktu
+                      };
+
+                      // Simpan ke database
+                      await DatabaseHelper()
+                          .insertPurchaseHistory(purchaseHistory);
+
                       // Tampilkan Snackbar ketika tombol "Beli Sekarang" ditekan
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

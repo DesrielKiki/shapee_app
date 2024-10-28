@@ -46,6 +46,16 @@ class DatabaseHelper {
             timestamp TEXT
           )
         ''');
+        await db.execute('''
+          CREATE TABLE purchase_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            product_name TEXT,
+            quantity INTEGER,
+            total_price REAL,
+            image TEXT,
+            purchase_date TEXT
+          )
+        ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -151,5 +161,24 @@ class DatabaseHelper {
     }
 
     return groupedChats.values.toList();
+  }
+
+  /**
+   * Purchase History Data Methods
+   */
+
+  // Insert data ke purchase history
+  Future<void> insertPurchaseHistory(Map<String, dynamic> purchase) async {
+    final db = await database;
+    await db.insert(
+      'purchase_history',
+      purchase,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getPurchaseHistory() async {
+    final db = await database;
+    return await db.query('purchase_history');
   }
 }
