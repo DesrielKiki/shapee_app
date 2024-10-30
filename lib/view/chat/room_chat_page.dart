@@ -138,7 +138,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Harga: ${Helper.formatCurrency(widget.product['price'] ?? 0.0)}',
+                                  'Harga : ${Helper.formatCurrency(widget.product['price'] ?? 0.0)}',
                                   style: const TextStyle(fontSize: 14),
                                 ),
                               ],

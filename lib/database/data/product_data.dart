@@ -2,7 +2,7 @@ class ProductData {
   static final List<Map<String, dynamic>> popularProduct = [
     {
       "name": "Indomie Goreng",
-      "price": "Rp. 3.000",
+      "price": 3000.00,
       "images": [
         "assets/indomie_goreng.jpeg",
         "assets/indomie_goreng_siap.png",
@@ -14,7 +14,7 @@ class ProductData {
     },
     {
       "name": "Kopi Kapal Api",
-      "price": "Rp. 5.000",
+      "price": 5000.00,
       "images": [
         "assets/kopi_kapal_api.jpeg",
         "assets/kapal_api_2.jpg",
@@ -25,7 +25,7 @@ class ProductData {
     },
     {
       "name": "Tepung Terigu Segitiga Biru",
-      "price": "Rp. 10.000",
+      "price": 10000.00,
       "images": [
         "assets/tepung_segitiga_biru.jpeg",
       ],
@@ -35,7 +35,7 @@ class ProductData {
     },
     {
       "name": "Gula Pasir Gulaku",
-      "price": "Rp. 12.000",
+      "price": 12000.00,
       "images": ["assets/gula_pasir_gulaku.jpeg", "assets/gulaku_2.jpeg"],
       "description":
           "Gulaku adalah gula pasir berkualitas tinggi yang manis alami.",
@@ -43,7 +43,7 @@ class ProductData {
     },
     {
       "name": "Minyak Goreng Bimoli",
-      "price": "Rp. 28.000",
+      "price": 28000.00,
       "images": [
         "assets/minyak_goreng_bimoli.jpeg",
         "assets/minyak_bimoli_2.jpg"
@@ -54,7 +54,7 @@ class ProductData {
     },
     {
       "name": "Sabun Mandi Lifebuoy",
-      "price": "Rp. 7.000",
+      "price": 7000.00,
       "images": [
         "assets/sabun_mandi_lifebuoy.jpeg",
         "assets/sabun_mandi_2.jpg",
@@ -67,7 +67,7 @@ class ProductData {
     },
     {
       "name": "Shampo Pantene",
-      "price": "Rp. 15.000",
+      "price": 15000.00,
       "images": [
         "assets/shampoo_pantene.jpeg",
         "assets/shampoo_pantene_2.jpg",
@@ -80,7 +80,7 @@ class ProductData {
     },
     {
       "name": "Pasta Gigi Pepsodent",
-      "price": "Rp. 8.000",
+      "price": 8000.00,
       "images": [
         "assets/pasta_gigi_pepsodent.jpg",
         "assets/pasta_gigi_2.jpeg",
@@ -91,7 +91,7 @@ class ProductData {
     },
     {
       "name": "Susu UHT Ultra Milk",
-      "price": "Rp. 6.000",
+      "price": 6000.00,
       "images": [
         "assets/susu_uht_ultramilk.png",
         "assets/susu_uht_ultamlik_fullcream.jpg",
@@ -103,7 +103,7 @@ class ProductData {
     },
     {
       "name": "Cokelat SilverQueen",
-      "price": "Rp. 20.000",
+      "price": 20000.00,
       "images": [
         "assets/coklat_silverqueen.jpg",
         "assets/coklat_silverqueen_white.jpeg"
@@ -114,7 +114,7 @@ class ProductData {
     },
     {
       "name": "Air Mineral Aqua",
-      "price": "Rp. 3.500",
+      "price": 3500.00,
       "images": [
         "assets/air_mineral_aqua.jpg",
       ],
@@ -124,7 +124,7 @@ class ProductData {
     },
     {
       "name": "Teh Botol Sosro",
-      "price": "Rp. 4.000",
+      "price": 4000.00,
       "images": [
         "assets/teh_botol_sosro.jpeg",
       ],
@@ -134,7 +134,7 @@ class ProductData {
     },
     {
       "name": "Biskuit Roma Kelapa",
-      "price": "Rp. 9.000",
+      "price": 9000.00,
       "images": [
         "assets/biskuit_roma_kelapa.jpg",
         "assets/biskuit_roma_cream.jpg",
@@ -146,7 +146,7 @@ class ProductData {
     },
     {
       "name": "Mi Sedap Ayam Bawang",
-      "price": "Rp. 2.800",
+      "price": 2800.00,
       "images": [
         "assets/mie_sedap_ayam_bawang.jpg",
       ],
@@ -156,7 +156,7 @@ class ProductData {
     },
     {
       "name": "Kecap Manis ABC",
-      "price": "Rp. 7.000",
+      "price": 7000.00,
       "images": [
         "assets/kecap_manis_abc.jpeg",
       ],
@@ -166,7 +166,7 @@ class ProductData {
     },
     {
       "name": "Sari Roti Tawar",
-      "price": "Rp. 13.000",
+      "price": 13000.00,
       "images": [
         "assets/sari_roti_tawar.jpeg",
         "assets/roti_tawar_gandum.jpeg",
@@ -178,7 +178,7 @@ class ProductData {
     },
     {
       "name": "Sosis So Nice",
-      "price": "Rp. 15.000",
+      "price": 15000.00,
       "images": ["assets/sosis_sonice.jpg", "assets/sosis_sonice_sapi.jpeg"],
       "description":
           "So Nice sosis daging berkualitas dengan rasa gurih dan lezat.",
@@ -186,7 +186,7 @@ class ProductData {
     },
     {
       "name": "Susu Kental Manis Indomilk",
-      "price": "Rp. 8.000",
+      "price": 8000.00,
       "images": [
         "assets/susu_kental_manis_indomilk.jpeg",
         "assets/susu_kental_manis_coklat.jpeg"
@@ -197,7 +197,7 @@ class ProductData {
     },
     {
       "name": "Coca Cola 1L",
-      "price": "Rp. 9.000",
+      "price": 9000.00,
       "images": [
         "assets/coca_cola_1liter.jpg",
       ],
@@ -207,7 +207,7 @@ class ProductData {
     },
     {
       "name": "Keju Kraft Cheddar",
-      "price": "Rp. 20.000",
+      "price": 20000.00,
       "images": ["assets/keju_kraft_cheddar.jpeg", "assets/keju_kraft_2.jpg"],
       "description":
           "Keju Kraft Cheddar dengan tekstur lembut dan rasa gurih yang nikmat.",

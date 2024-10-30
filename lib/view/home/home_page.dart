@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/cart/cart_page.dart';
+import 'package:shapee_app/view/color_config.dart';
 import 'package:shapee_app/view/detail/detail_page.dart';
 import 'package:shapee_app/view/chat/list_chat_page.dart';
 import 'package:shapee_app/database/data/product_data.dart';
@@ -54,18 +55,18 @@ class _HomePageState extends State<HomePage> {
             decoration: const InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
-                color: Colors.grey,
+                color: ColorConfig.labelColor,
                 size: 24,
               ),
               hintText: 'Cari produk . . .',
               border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: TextStyle(color: ColorConfig.labelColor),
               contentPadding: EdgeInsets.only(left: -10, top: 10, bottom: 9),
             ),
-            style: const TextStyle(color: Colors.black),
+            style: const TextStyle(color: ColorConfig.secondaryColor),
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 114, 236, 255),
+        backgroundColor: ColorConfig.primaryColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
@@ -99,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: ColorConfig.labelColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -140,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
-                              side: BorderSide(color: Colors.grey.shade300),
+                              side: const BorderSide(
+                                  color: ColorConfig.labelColor),
                             ),
                             elevation: 2,
                             child: Column(
@@ -174,12 +176,13 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 5.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        product['price']!,
+                                        Helper.formatCurrency(
+                                            product['price']!),
                                         style: const TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.bold,
@@ -190,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                         'Terjual: ${Helper.formatSold(product['sold']!)}',
                                         style: const TextStyle(
                                           fontSize: 12.0,
-                                          color: Colors.grey,
+                                          color: ColorConfig.labelColor,
                                         ),
                                       ),
                                     ],

@@ -53,6 +53,7 @@ class DatabaseHelper {
             quantity INTEGER,
             total_price REAL,
             image TEXT,
+            payment_method TEXT,
             purchase_date TEXT
           )
         ''');
@@ -180,5 +181,28 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getPurchaseHistory() async {
     final db = await database;
     return await db.query('purchase_history');
+  }
+
+  Future<void> confirmPayment({
+    required String productName,
+    required int quantity,
+    required double totalPrice,
+    required String image,
+    required String paymentMethod,
+  }) async {
+    final db = await database;
+    Map<String, dynamic> purchase = {
+      'product_name': productName,
+      'quantity': quantity,
+      'total_price': totalPrice,
+      'image': image,
+      'payment_method': paymentMethod,
+      'purchase_date': DateTime.now().toIso8601String(),
+    };
+    await db.insert(
+      'purchase_history',
+      purchase,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

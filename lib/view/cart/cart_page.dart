@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/database_helper.dart';
-import 'package:shapee_app/database/helper/helper.dart'; 
+import 'package:shapee_app/database/helper/helper.dart';
+import 'package:shapee_app/view/payment/payment_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -45,7 +46,7 @@ class _CartPageState extends State<CartPage> {
                   await DatabaseHelper().deleteCartItem(id);
                 }
                 selectedItems.clear();
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
                 _loadCartItems();
               },
               child: const Text('Hapus'),
@@ -62,7 +63,6 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text('Keranjang Belanja'),
         actions: [
-          
           if (selectedItems.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete),
@@ -70,84 +70,113 @@ class _CartPageState extends State<CartPage> {
             ),
         ],
       ),
-      body: cartItems.isEmpty
-          ? const Center(
-              child: Text(
-                'Keranjang Anda Kosong',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            )
-          : ListView.builder(
-              itemCount: cartItems.length,
-              itemBuilder: (context, index) {
-                final item = cartItems[index];
-                final isSelected = selectedItems.contains(item['id']);
+      body: Column(
+        children: [
+          Expanded(
+            child: cartItems.isEmpty
+                ? const Center(
+                    child: Text(
+                      'Keranjang Anda Kosong',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : // Pada item ListView.builder di CartPage:
+                ListView.builder(
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      final item = cartItems[index];
+                      final isSelected = selectedItems.contains(item['id']);
 
-                return GestureDetector(
-                  onLongPress: () {
-                    setState(() {
-                      if (isSelected) {
-                        selectedItems.remove(item['id']);
-                      } else {
-                        selectedItems.add(item['id']);
-                      }
-                    });
-                  },
-                  child: Card(
-                    color: isSelected
-                        ? Colors.blue.withOpacity(0.3)
-                        : Colors.white,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset(
-                              item['image'] ?? '', 
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      return GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            if (isSelected) {
+                              selectedItems.remove(item['id']);
+                            } else {
+                              selectedItems.add(item['id']);
+                            }
+                          });
+                        },
+                        child: Card(
+                          color: isSelected
+                              ? Colors.blue.withOpacity(0.3)
+                              : Colors.white,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
                               children: [
-                                Text(
-                                  item['name'] ?? 'Tanpa Nama', 
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Image.asset(
+                                    item['image'] ?? '',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Jumlah: ${item['quantity'] ?? 0} pcs', 
-                                  style: const TextStyle(fontSize: 14),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item['name'] ?? 'Tanpa Nama',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Jumlah: ${item['quantity'] ?? 0} pcs',
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Harga per pcs: ${Helper.formatCurrency(item['price'] ?? 0.0)}',
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Total: ${Helper.formatCurrency(item['totalPrice'] ?? 0.0)}',
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Harga per pcs: ${Helper.formatCurrency(item['price'] ?? 0.0)}', 
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Total: ${Helper.formatCurrency(item['totalPrice'] ?? 0.0)}', 
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.red),
+                                // Tambahkan tombol icon checkout di sebelah kanan
+                                IconButton(
+                                  icon: const Icon(Icons.shopping_cart_checkout,
+                                      color: Colors.green),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PaymentPage(
+                                          name: item['name'],
+                                          price: item['price'],
+                                          images: [item['image']],
+                                          quantity: item['quantity'],
+                                          cartItemId:
+                                              item['id'], // Kirim ID item
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+          ),
+        ],
+      ),
     );
   }
 }

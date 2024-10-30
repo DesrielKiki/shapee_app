@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/chat/room_chat_page.dart';
+import 'package:shapee_app/view/color_config.dart';
 import 'package:shapee_app/view/detail/detail_bottom_sheet.dart';
+import 'package:shapee_app/view/payment/payment_page.dart';
 
 class DetailPage extends StatefulWidget {
   final List<String> images;
   final String name;
-  final String price;
+  final double price;
   final int sold;
   final String description;
 
@@ -98,11 +100,7 @@ class _DetailPageState extends State<DetailPage> {
                         Row(
                           children: [
                             Text(
-                              Helper.formatCurrency(double.tryParse(widget.price
-                                      .replaceAll('Rp. ', '')
-                                      .replaceAll('.', '')
-                                      .trim()) ??
-                                  0),
+                              Helper.formatCurrency(widget.price),
                               style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -148,20 +146,15 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0096c7),
+                      backgroundColor: ColorConfig.buttonColor,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
+                          borderRadius: BorderRadius.circular(0),
+                          side: const BorderSide(
+                              color: ColorConfig.labelColor, width: 0.5)),
                     ),
                     onPressed: () {
-                      double? price = double.tryParse(
-                        widget.price
-                            .replaceAll('Rp. ', '')
-                            .replaceAll('.', '')
-                            .replaceAll(',', '.')
-                            .trim(),
-                      );
+                      double? price = widget.price;
 
                       Navigator.push(
                         context,
@@ -169,7 +162,7 @@ class _DetailPageState extends State<DetailPage> {
                           builder: (context) => RoomChatPage(
                             product: {
                               'name': widget.name,
-                              'price': price ?? 0,
+                              'price': price,
                               'image': widget.images.isNotEmpty
                                   ? widget.images[0]
                                   : '',
@@ -208,11 +201,14 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0096c7),
+                      backgroundColor: ColorConfig.buttonColor,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
+                          borderRadius: BorderRadius.circular(0),
+                          side: const BorderSide(
+                            color: ColorConfig.labelColor,
+                            width: 0.5,
+                          )),
                     ),
                     onPressed: () {
                       showModalBottomSheet(
@@ -255,7 +251,7 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 182, 0, 254),
+                      backgroundColor: const Color.fromARGB(255, 8, 166, 27),
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
