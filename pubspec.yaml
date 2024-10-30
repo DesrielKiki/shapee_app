@@ -31,14 +31,18 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.0.0+4
-  intl: ^0.18.1 # Versi terbaru pada saat ini, periksa untuk versi terbaru
+  intl: ^0.18.1
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  shared_preferences: ^2.3.2
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
 
+  image_picker: ^0.8.4+2
   path_provider: ^2.0.0
   path: ^1.8.0
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  permission_handler: ^10.4.5  # Ganti dengan versi terbaru
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +67,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/shapee_logo.png
+
     - assets/air_mineral_aqua.jpg
     - assets/biskuit_roma_kelapa.jpg
     - assets/coca_cola_1liter.jpg
@@ -84,7 +90,7 @@ flutter:
     - assets/teh_botol_sosro.jpeg
     - assets/tepung_segitiga_biru.jpeg
     - assets/indomie_goreng_siap.png
-    
+
     - assets/indomie_goreng_varian.jpg
     - assets/susu_uht_strawbery.jpeg
     - assets/susu_uht_ultamlik_fullcream.jpg

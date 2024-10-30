@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shapee_app/view/color_config.dart';
 import 'package:shapee_app/view/history/history_page.dart';
+import 'package:shapee_app/view/profile/profile_page.dart';
 import '../view/home/home_page.dart'; // Ganti dengan path yang sesuai
 
 class NavigationPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class _NavigationPageState extends State<NavigationPage> {
   final List<Widget> _pages = <Widget>[
     const HomePage(),
     const HistoryPage(),
+    const ProfilePage(),
   ];
 
   int _selectedIndex = 0;
@@ -45,6 +47,14 @@ class _NavigationPageState extends State<NavigationPage> {
                   _selectedIndex == 1 ? ColorConfig.primaryColor : Colors.grey,
             ),
             label: _selectedIndex == 1 ? "History" : "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              color:
+                  _selectedIndex == 2 ? ColorConfig.primaryColor : Colors.grey,
+            ),
+            label: _selectedIndex == 2 ? "Profile" : "",
           ),
         ],
       ),

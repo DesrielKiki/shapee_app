@@ -35,13 +35,13 @@ class _PaymentPageState extends State<PaymentPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pembayaran'),
-        backgroundColor: Color.fromARGB(255, 114, 236, 255), // Brand color
+        backgroundColor: const Color.fromARGB(255, 114, 236, 255), // Brand color
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 114, 236, 255).withOpacity(0.3),
+              const Color.fromARGB(255, 114, 236, 255).withOpacity(0.3),
               Colors.white
             ],
             begin: Alignment.topCenter,
@@ -246,7 +246,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 114, 236, 255),
+        color: const Color.fromARGB(255, 114, 236, 255),
         child: SizedBox(
           width: double
               .infinity, // This ensures the button takes up the full width
@@ -284,7 +284,7 @@ class _PaymentPageState extends State<PaymentPage> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  Color.fromARGB(255, 114, 236, 255), // Brand color
+                  const Color.fromARGB(255, 114, 236, 255), // Brand color
             ),
             child: const Text(
               'Konfirmasi Pembayaran',

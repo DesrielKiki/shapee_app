@@ -1,4 +1,15 @@
-allprojects {
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.3.2" // or the latest stable version
+        classpath "com.google.gms:google-services:4.4.2" // Tambahkan baris ini di sini
+    }
+}
+
+allprojects {   
     repositories {
         google()
         mavenCentral()

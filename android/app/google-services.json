@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "548483000238",
+    "project_id": "shapee-app-62f1b",
+    "storage_bucket": "shapee-app-62f1b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548483000238:android:c3a22e66a7fe83e66eca3f",
+        "android_client_info": {
+          "package_name": "id.desriel.shapee.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkAVqsMF-e40wHvrmEc5h1vnaWJqa1muI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548483000238:android:b5bf073183fe4a9d6eca3f",
+        "android_client_info": {
+          "package_name": "id.desriel.shapee.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkAVqsMF-e40wHvrmEc5h1vnaWJqa1muI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

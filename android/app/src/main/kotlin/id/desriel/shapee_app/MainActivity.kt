@@ -1,4 +1,4 @@
-package com.example.shapee_app
+package id.desriel.shapee_app
 
 import io.flutter.embedding.android.FlutterActivity
 

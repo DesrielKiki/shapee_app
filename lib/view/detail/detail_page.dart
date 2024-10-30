@@ -3,7 +3,6 @@ import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/chat/room_chat_page.dart';
 import 'package:shapee_app/view/color_config.dart';
 import 'package:shapee_app/view/detail/detail_bottom_sheet.dart';
-import 'package:shapee_app/view/payment/payment_page.dart';
 
 class DetailPage extends StatefulWidget {
   final List<String> images;
