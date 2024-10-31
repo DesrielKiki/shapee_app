@@ -23,17 +23,15 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isLoggedIn = prefs.getBool('isLoggedIn');
 
-    // Buat penundaan minimum untuk splash screen (1 detik)
     await Future.delayed(const Duration(seconds: 1));
 
-    // Cek status login dan navigasi
     if (isLoggedIn == true) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const NavigationPage()),
       );
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     }
   }

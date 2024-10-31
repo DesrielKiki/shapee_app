@@ -18,7 +18,7 @@ class CartAndPurchaseBottomSheet extends StatefulWidget {
   });
 
   @override
-  _CartAndPurchaseBottomSheetState createState() =>
+  State<CartAndPurchaseBottomSheet> createState() =>
       _CartAndPurchaseBottomSheetState();
 }
 
@@ -157,12 +157,6 @@ class _CartAndPurchaseBottomSheetState
                 ElevatedButton(
                   onPressed: () async {
                     if (widget.isForPurchase) {
-                      String firstImage =
-                          widget.images.isNotEmpty ? widget.images[0] : '';
-
-
-                      double? price = widget.price;
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(

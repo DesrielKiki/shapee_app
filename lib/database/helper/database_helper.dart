@@ -1,3 +1,5 @@
+
+
 // ignore_for_file: slash_for_doc_comments
 
 import 'package:sqflite/sqflite.dart';
@@ -168,7 +170,7 @@ class DatabaseHelper {
    * Purchase History Data Methods
    */
 
-  // Insert data ke purchase history
+  
   Future<void> insertPurchaseHistory(Map<String, dynamic> purchase) async {
     final db = await database;
     await db.insert(

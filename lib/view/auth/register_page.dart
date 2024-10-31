@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
@@ -37,15 +37,12 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         _profileImage = File(pickedFile.path);
       });
-    } else {
-      print("No image selected.");
-    }
+    } else {}
   }
 
   Future<String?> _uploadProfileImage() async {
     if (_profileImage == null) {
-      print("No profile image selected.");
-      return null; // No image selected
+      return null;
     }
 
     try {
@@ -57,7 +54,6 @@ class _RegisterPageState extends State<RegisterPage> {
       String downloadUrl = await storageRef.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print("Error uploading profile image: $e");
       return null;
     }
   }
@@ -67,7 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
 
-    // Input validation
     String? emailError = ValidationHelper.validateEmail(_emailController.text);
     String? passwordError =
         ValidationHelper.validatePassword(_passwordController.text);
@@ -80,7 +75,6 @@ class _RegisterPageState extends State<RegisterPage> {
     String? usernameError =
         ValidationHelper.validateField(_usernameController.text, "Username");
 
-    // Show error messages if any
     if (emailError != null ||
         passwordError != null ||
         confirmPasswordError != null ||
@@ -123,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await prefs.setBool('isLoggedIn', true);
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => NavigationPage()),
+        MaterialPageRoute(builder: (context) => const NavigationPage()),
         (Route<dynamic> route) => false,
       );
     } catch (e) {
@@ -196,37 +190,34 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           TextFormField(
                             controller: _fullNameController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Nama Lengkap',
                               border: OutlineInputBorder(),
-                              filled: true, // Add this for filled background
-                              fillColor:
-                                  Colors.white, // Change background color
-                              suffixIcon: const Icon(Icons.person),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: Icon(Icons.person),
                             ),
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _usernameController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Username',
                               border: OutlineInputBorder(),
-                              filled: true, // Add this for filled background
-                              fillColor:
-                                  Colors.white, // Change background color
-                              suffixIcon: const Icon(Icons.person),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: Icon(Icons.person),
                             ),
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _emailController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Email',
                               border: OutlineInputBorder(),
-                              filled: true, // Add this for filled background
-                              fillColor:
-                                  Colors.white, // Change background color
-                              suffixIcon: const Icon(Icons.email),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: Icon(Icons.email),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -235,9 +226,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                               labelText: 'Password',
                               border: const OutlineInputBorder(),
-                              filled: true, // Add this for filled background
-                              fillColor:
-                                  Colors.white, // Change background color
+                              filled: true,
+                              fillColor: Colors.white,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText
@@ -259,9 +249,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                               labelText: 'Konfirmasi Password',
                               border: const OutlineInputBorder(),
-                              filled: true, // Add this for filled background
-                              fillColor:
-                                  Colors.white, // Change background color
+                              filled: true,
+                              fillColor: Colors.white,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText

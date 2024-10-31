@@ -6,7 +6,7 @@ class ListChatPage extends StatefulWidget {
   const ListChatPage({super.key});
 
   @override
-  _ListChatPageState createState() => _ListChatPageState();
+  State<ListChatPage> createState() => _ListChatPageState();
 }
 
 class _ListChatPageState extends State<ListChatPage> {
@@ -58,7 +58,6 @@ class _ListChatPageState extends State<ListChatPage> {
                           ),
                         ).then((_) => _loadChats());
                       },
-                      
                     ),
                     const Divider(),
                   ],

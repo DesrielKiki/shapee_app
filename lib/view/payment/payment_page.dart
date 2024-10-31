@@ -8,7 +8,7 @@ class PaymentPage extends StatefulWidget {
   final double price;
   final List<String> images;
   final int quantity;
-  final int? cartItemId; // Nullable parameter
+  final int? cartItemId;
 
   const PaymentPage({
     super.key,
@@ -16,11 +16,11 @@ class PaymentPage extends StatefulWidget {
     required this.price,
     required this.images,
     required this.quantity,
-    this.cartItemId, // Optional parameter
+    this.cartItemId,
   });
 
   @override
-  _PaymentPageState createState() => _PaymentPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
@@ -35,7 +35,7 @@ class _PaymentPageState extends State<PaymentPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pembayaran'),
-        backgroundColor: const Color.fromARGB(255, 114, 236, 255), // Brand color
+        backgroundColor: const Color.fromARGB(255, 114, 236, 255),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -53,7 +53,6 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product Details
               Text(
                 widget.name,
                 style: const TextStyle(
@@ -101,8 +100,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Payment Method Section
               const Text(
                 'Metode Pembayaran',
                 style: TextStyle(
@@ -174,8 +171,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Additional Information Section
               const Text(
                 'Ringkasan Pesanan',
                 style: TextStyle(
@@ -221,8 +216,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // User Feedback Section
               const Text(
                 'Informasi Pembayaran',
                 style: TextStyle(
@@ -239,8 +232,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 'Jika Anda memiliki pertanyaan, silakan hubungi kami melalui email atau telepon.',
               ),
               const SizedBox(height: 16),
-
-              // Final Confirmation Section
             ],
           ),
         ),
@@ -248,15 +239,11 @@ class _PaymentPageState extends State<PaymentPage> {
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 114, 236, 255),
         child: SizedBox(
-          width: double
-              .infinity, // This ensures the button takes up the full width
-          height: 50, // This sets the height of the button to 50
+          width: double.infinity,
+          height: 50,
           child: ElevatedButton(
             onPressed: () async {
-              // Handle payment process
               if (selectedPaymentMethod != null) {
-                // Panggil fungsi confirmPayment
-
                 await DatabaseHelper().confirmPayment(
                   productName: widget.name,
                   quantity: widget.quantity,
@@ -272,8 +259,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => const NavigationPage()),
-                    (route) =>
-                        false); // Menghapus semua route sebelumnya, kembali ke halaman utama
+                    (route) => false);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -283,14 +269,13 @@ class _PaymentPageState extends State<PaymentPage> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  const Color.fromARGB(255, 114, 236, 255), // Brand color
+              backgroundColor: const Color.fromARGB(255, 114, 236, 255),
             ),
             child: const Text(
               'Konfirmasi Pembayaran',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black, // Change text color to black for contrast
+                color: Colors.black,
               ),
             ),
           ),

@@ -5,23 +5,21 @@ class ValidationHelper {
     if (value.isEmpty) {
       return '$fieldName tidak boleh kosong.';
     }
-    return null; // Tidak ada kesalahan
+    return null;
   }
 
-  // Validasi email
   static String? validateEmail(String email) {
     if (email.isEmpty) {
       return 'Email tidak boleh kosong';
     }
-    // Cek format email sederhana
+
     if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
         .hasMatch(email)) {
       return 'Format email tidak valid';
     }
-    return null; // Tidak ada error
+    return null;
   }
 
-  // Validasi password
   static String? validatePassword(String password) {
     if (password.isEmpty) {
       return 'Password tidak boleh kosong';
@@ -29,10 +27,9 @@ class ValidationHelper {
     if (password.length < 6) {
       return 'Password harus terdiri dari minimal 6 karakter';
     }
-    return null; // Tidak ada error
+    return null;
   }
 
-  // Validasi konfirmasi password
   static String? validateConfirmPassword(
       String password, String confirmPassword) {
     if (confirmPassword.isEmpty) {
@@ -41,10 +38,9 @@ class ValidationHelper {
     if (password != confirmPassword) {
       return 'Password dan konfirmasi tidak cocok';
     }
-    return null; // Tidak ada error
+    return null;
   }
 
-  // Penanganan exception dari Firebase Auth
   static String handleAuthException(dynamic exception) {
     if (exception is FirebaseAuthException) {
       switch (exception.code) {
@@ -62,6 +58,6 @@ class ValidationHelper {
           return 'Terjadi kesalahan. Silakan coba lagi.';
       }
     }
-    return 'Terjadi kesalahan. Silakan coba lagi.'; // Pesan default
+    return 'Terjadi kesalahan. Silakan coba lagi.';
   }
 }

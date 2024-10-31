@@ -8,26 +8,24 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true; // Untuk visibilitas password
-  bool _isLoading = false; // Indikator loading
+  bool _obscureText = true;
+  bool _isLoading = false;
 
   Future<void> _login() async {
     setState(() {
-      _isLoading = true; // Mulai loading
+      _isLoading = true;
     });
 
-    // Validasi input
     String? emailError = ValidationHelper.validateEmail(_emailController.text);
     String? passwordError =
         ValidationHelper.validatePassword(_passwordController.text);
 
-    // Tampilkan pesan kesalahan jika ada
     if (emailError != null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(emailError)));
@@ -53,11 +51,9 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
-      // Simpan status login ke SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
-      // Navigasi ke halaman utama setelah login
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => NavigationPage()),
         (Route<dynamic> route) => false,
@@ -68,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
           .showSnackBar(SnackBar(content: Text(errorMessage)));
     } finally {
       setState(() {
-        _isLoading = false; // Akhiri loading
+        _isLoading = false;
       });
     }
   }
@@ -129,8 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _obscureText =
-                                        !_obscureText; // Toggle visibility
+                                    _obscureText = !_obscureText;
                                   });
                                 },
                               ),
@@ -139,10 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 20),
                           _isLoading
-                              ? const CircularProgressIndicator() // Tampilkan indikator loading
+                              ? const CircularProgressIndicator()
                               : ElevatedButton(
                                   onPressed: _login,
-                                  child: const Text('Login'),
                                   style: ElevatedButton.styleFrom(
                                     minimumSize:
                                         const Size(double.infinity, 50),
@@ -151,6 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
+                                  child: const Text('Login'),
                                 ),
                           const SizedBox(height: 20),
                           Row(

@@ -11,7 +11,7 @@ class RoomChatPage extends StatefulWidget {
       {super.key, required this.product, this.fromListChat = false});
 
   @override
-  _RoomChatPageState createState() => _RoomChatPageState();
+  State<RoomChatPage> createState() => _RoomChatPageState();
 }
 
 class _RoomChatPageState extends State<RoomChatPage> {

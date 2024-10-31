@@ -52,8 +52,7 @@ class Helper {
 
   static String formatDate(String date) {
     DateTime parsedDate = DateTime.parse(date);
-    final DateFormat formatter =
-        DateFormat('dd MMMM yyyy'); // Format sesuai keinginan Anda
+    final DateFormat formatter = DateFormat('dd MMMM yyyy');
     return formatter.format(parsedDate);
   }
 }

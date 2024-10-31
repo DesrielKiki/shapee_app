@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shapee_app/view/color_config.dart';
 import 'package:shapee_app/view/history/history_page.dart';
 import 'package:shapee_app/view/profile/profile_page.dart';
-import '../view/home/home_page.dart'; // Ganti dengan path yang sesuai
+import '../view/home/home_page.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});

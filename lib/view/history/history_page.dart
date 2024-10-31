@@ -6,7 +6,7 @@ class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
   @override
-  _HistoryPageState createState() => _HistoryPageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
 class _HistoryPageState extends State<HistoryPage> {
@@ -39,16 +39,15 @@ class _HistoryPageState extends State<HistoryPage> {
               itemBuilder: (context, index) {
                 final item = purchaseHistory[index];
                 return Card(
-                  elevation: 4, // Added elevation for shadow effect
+                  elevation: 4,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16.0),
                     leading: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(8), // Rounded image corners
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
                         item['image'],
                         width: 50,

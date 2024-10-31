@@ -7,7 +7,7 @@ class CartPage extends StatefulWidget {
   const CartPage({super.key});
 
   @override
-  _CartPageState createState() => _CartPageState();
+  State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
@@ -81,8 +81,7 @@ class _CartPageState extends State<CartPage> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   )
-                : // Pada item ListView.builder di CartPage:
-                ListView.builder(
+                : ListView.builder(
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final item = cartItems[index];
@@ -147,7 +146,6 @@ class _CartPageState extends State<CartPage> {
                                     ],
                                   ),
                                 ),
-                                // Tambahkan tombol icon checkout di sebelah kanan
                                 IconButton(
                                   icon: const Icon(Icons.shopping_cart_checkout,
                                       color: Colors.green),
@@ -160,8 +158,7 @@ class _CartPageState extends State<CartPage> {
                                           price: item['price'],
                                           images: [item['image']],
                                           quantity: item['quantity'],
-                                          cartItemId:
-                                              item['id'], // Kirim ID item
+                                          cartItemId: item['id'],
                                         ),
                                       ),
                                     );

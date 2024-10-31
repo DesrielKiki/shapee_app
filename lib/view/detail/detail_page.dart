@@ -21,7 +21,7 @@ class DetailPage extends StatefulWidget {
   });
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
@@ -33,9 +33,7 @@ class _DetailPageState extends State<DetailPage> {
     final soldFormatted = Helper.formatSold(widget.sold.toString());
 
     return Scaffold(
-      resizeToAvoidBottomInset:
-          true, // Menghindari bottom sheet tertutup oleh keyboard
-
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(widget.name,
             style: const TextStyle(

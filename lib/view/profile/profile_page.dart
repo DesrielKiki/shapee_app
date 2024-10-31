@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart'; // Import package intl
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -35,16 +35,15 @@ class _ProfilePageState extends State<ProfilePage> {
         _fullName = userDoc['full_name'];
         _username = userDoc['username'];
         _email = userDoc['user_email'];
-        // Convert date of birth to desired format
+
         _dateOfBirth = _formatDate(userDoc['date_of_birth']);
       });
     }
   }
 
   String _formatDate(String date) {
-    // Assuming date is in the format 'YYYY-MM-DD'
     DateTime parsedDate = DateTime.parse(date);
-    return DateFormat('dd/MM/yyyy').format(parsedDate); // Format dd/MM/yyyy
+    return DateFormat('dd/MM/yyyy').format(parsedDate);
   }
 
   Future<void> _logout() async {
@@ -74,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: Stack(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 60,
                         backgroundImage:
                             AssetImage('assets/images/profile_placeholder.png'),
@@ -90,9 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {
-                              // Action for editing profile picture
-                            },
+                            onPressed: () {},
                           ),
                         ),
                       ),
@@ -149,8 +146,7 @@ class ProfileItem extends StatelessWidget {
   final String title;
   final String value;
 
-  const ProfileItem({Key? key, required this.title, required this.value})
-      : super(key: key);
+  const ProfileItem({super.key, required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
