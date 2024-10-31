@@ -160,13 +160,6 @@ class _CartAndPurchaseBottomSheetState
                       String firstImage =
                           widget.images.isNotEmpty ? widget.images[0] : '';
 
-                      Map<String, dynamic> purchaseHistory = {
-                        'product_name': widget.name,
-                        'quantity': quantity,
-                        'total_price': itemPrice * quantity,
-                        'image': firstImage,
-                        'purchase_date': DateTime.now().toIso8601String(),
-                      };
 
                       double? price = widget.price;
 

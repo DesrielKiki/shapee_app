@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart'; // Import package intl
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -33,10 +34,17 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _fullName = userDoc['full_name'];
         _username = userDoc['username'];
-        _dateOfBirth = userDoc['date_of_birth'];
         _email = userDoc['user_email'];
+        // Convert date of birth to desired format
+        _dateOfBirth = _formatDate(userDoc['date_of_birth']);
       });
     }
+  }
+
+  String _formatDate(String date) {
+    // Assuming date is in the format 'YYYY-MM-DD'
+    DateTime parsedDate = DateTime.parse(date);
+    return DateFormat('dd/MM/yyyy').format(parsedDate); // Format dd/MM/yyyy
   }
 
   Future<void> _logout() async {
@@ -58,10 +66,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         child: SingleChildScrollView(
-          // Wrap with SingleChildScrollView for scrolling
           child: Padding(
-            padding: const EdgeInsets.only(
-                top: 62.0, left: 16.0, right: 16.0), // Added top padding
+            padding: const EdgeInsets.only(top: 62.0, left: 16.0, right: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -70,8 +76,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       CircleAvatar(
                         radius: 60,
-                        backgroundImage: AssetImage(
-                            'assets/images/profile_placeholder.png'), // Placeholder image
+                        backgroundImage:
+                            AssetImage('assets/images/profile_placeholder.png'),
                       ),
                       Positioned(
                         bottom: 0,
@@ -103,10 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 20),
                 ListView(
-                  shrinkWrap:
-                      true, // Prevent ListView from taking infinite height
-                  physics:
-                      const NeverScrollableScrollPhysics(), // Disable scrolling in ListView
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     ProfileItem(title: 'Nama Lengkap', value: _fullName ?? ''),
                     ProfileItem(title: 'Username', value: _username ?? ''),
@@ -175,7 +179,7 @@ class ProfileItem extends StatelessWidget {
                   Icon(
                     _getIconForTitle(title),
                     color: Colors.blue,
-                    size: 30, // Increased icon size
+                    size: 30,
                   ),
                   const SizedBox(width: 12),
                   Text(
@@ -189,8 +193,7 @@ class ProfileItem extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Divider(
-                  color: Colors.blueGrey.shade300), // Divider for separation
+              Divider(color: Colors.blueGrey.shade300),
               const SizedBox(height: 8),
               Text(
                 value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shapee_app/database/helper/validation_helper.dart';
 import 'package:shapee_app/navigation/navigation_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,13 +14,37 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true; // For password visibility
-  bool _isLoading = false; // Loading indicator
+  bool _obscureText = true; // Untuk visibilitas password
+  bool _isLoading = false; // Indikator loading
 
   Future<void> _login() async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true; // Mulai loading
     });
+
+    // Validasi input
+    String? emailError = ValidationHelper.validateEmail(_emailController.text);
+    String? passwordError =
+        ValidationHelper.validatePassword(_passwordController.text);
+
+    // Tampilkan pesan kesalahan jika ada
+    if (emailError != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(emailError)));
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    if (passwordError != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(passwordError)));
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
 
     try {
       UserCredential userCredential =
@@ -27,23 +52,23 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Save login status to SharedPreferences
+
+      // Simpan status login ke SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
-      // Navigate to the main page after login
+      // Navigasi ke halaman utama setelah login
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => NavigationPage()),
         (Route<dynamic> route) => false,
       );
     } catch (e) {
-      print(e);
-      // Show error to the user
+      String errorMessage = ValidationHelper.handleAuthException(e);
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Login failed')));
+          .showSnackBar(SnackBar(content: Text(errorMessage)));
     } finally {
       setState(() {
-        _isLoading = false; // End loading
+        _isLoading = false; // Akhiri loading
       });
     }
   }
@@ -95,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _passwordController,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText
@@ -114,18 +139,16 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 20),
                           _isLoading
-                              ? const CircularProgressIndicator() // Show loading indicator if _isLoading is true
+                              ? const CircularProgressIndicator() // Tampilkan indikator loading
                               : ElevatedButton(
                                   onPressed: _login,
                                   child: const Text('Login'),
                                   style: ElevatedButton.styleFrom(
                                     minimumSize:
                                         const Size(double.infinity, 50),
-                                    foregroundColor:
-                                        Colors.blue, // Button color
+                                    foregroundColor: Colors.blue,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          12), // Rounded corners
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
                                 ),
@@ -137,8 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.black54)),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      '/register'); // Navigate to registration page
+                                  Navigator.of(context).pushNamed('/register');
                                 },
                                 child: const Text('Registrasi',
                                     style: TextStyle(color: Colors.blue)),
