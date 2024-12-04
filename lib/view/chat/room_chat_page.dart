@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/firebase_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 
 class RoomChatPage extends StatefulWidget {
@@ -16,7 +16,8 @@ class RoomChatPage extends StatefulWidget {
 
 class _RoomChatPageState extends State<RoomChatPage> {
   List<Map<String, dynamic>> messages = [];
-  final TextEditingController messageController = TextEditingController();
+  final FirebaseHelper _firebaseHelper = FirebaseHelper();
+  TextEditingController _messageController = TextEditingController();
   bool isLoading = true;
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
@@ -32,21 +33,30 @@ class _RoomChatPageState extends State<RoomChatPage> {
   @override
   void initState() {
     super.initState();
+    print("Received product data: ${widget.product}");
+    if (widget.product['name'] == null || widget.product['name'] == '') {
+      print("Product name is null or empty!");
+    } else {
+      print("Product name: ${widget.product['name']}");
+    }
     _loadMessages();
     _startTimer();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer?.cancel(); // Batalkan timer saat widget dibuang
     super.dispose();
   }
 
-  Future<void> _loadMessages() async {
+  _loadMessages() async {
     try {
-      messages = await DatabaseHelper().getMessages(widget.product['name']);
+      List<Map<String, dynamic>> loadedMessages =
+          await _firebaseHelper.getMessages(widget.product['name']);
       if (mounted) {
+        print("Loaded messages: $loadedMessages");
         setState(() {
+          messages = loadedMessages;
           isLoading = false;
         });
 
@@ -55,36 +65,39 @@ class _RoomChatPageState extends State<RoomChatPage> {
         });
       }
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+      print("Error loading messages: $e");
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   Future<void> _sendMessage(String messageContent) async {
     if (messageContent.isNotEmpty) {
-      await DatabaseHelper()
+      await FirebaseHelper()
           .insertMessage(widget.product['name'], messageContent, true);
-      messageController.clear();
+      _messageController.clear();
       await _loadMessages();
       _autoReply(messageContent);
     }
   }
 
   void _autoReply(String userMessage) async {
-    await Future.delayed(const Duration(seconds: 1));
-    String autoReplyMessage =
-        "Terima kasih! Kami akan segera menghubungi Anda.";
-    await DatabaseHelper()
-        .insertMessage(widget.product['name'], autoReplyMessage, false);
-    await _loadMessages();
+    if (userMessage.isNotEmpty) {
+      await Future.delayed(const Duration(seconds: 1));
+      String autoReplyMessage =
+          "Terima kasih! Kami akan segera menghubungi Anda.";
+      await FirebaseHelper()
+          .insertMessage(widget.product['name'], autoReplyMessage, false);
+      await _loadMessages();
+    }
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -119,10 +132,13 @@ class _RoomChatPageState extends State<RoomChatPage> {
                         children: [
                           Image.asset(
                             widget.product['image'] ??
-                                'path/to/default/image.png',
+                                'assets/default_image.png',
                             height: 80,
                             width: 80,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset('assets/default_image.png');
+                            },
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -229,7 +245,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                messageController.text = template;
+                                _messageController.text = template;
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey[200],
@@ -249,7 +265,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
                       children: [
                         Expanded(
                           child: TextField(
-                            controller: messageController,
+                            controller: _messageController,
                             decoration: InputDecoration(
                               hintText: 'Ketik pesan...',
                               border: OutlineInputBorder(
@@ -264,7 +280,8 @@ class _RoomChatPageState extends State<RoomChatPage> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.send, color: Colors.red),
-                          onPressed: () => _sendMessage(messageController.text),
+                          onPressed: () =>
+                              _sendMessage(_messageController.text),
                         ),
                       ],
                     ),

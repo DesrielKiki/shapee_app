@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/firebase_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/view/payment/payment_page.dart';
 
@@ -178,7 +178,7 @@ class _CartAndPurchaseBottomSheetState
                         'totalPrice': widget.price * quantity,
                         'image': firstImage,
                       };
-                      await DatabaseHelper().insertCartItem(cartItem);
+                      await FirebaseHelper().insertCartItem(cartItem);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content:

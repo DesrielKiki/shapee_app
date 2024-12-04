@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:shapee_app/database/helper/validation_helper.dart';
 import 'package:shapee_app/navigation/navigation_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shapee_app/database/helper/firebase_helper.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -29,6 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscureText = true;
   bool _isLoading = false;
 
+  final FirebaseHelper _firebaseHelper = FirebaseHelper();
+
   Future<void> _selectImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -37,24 +38,6 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         _profileImage = File(pickedFile.path);
       });
-    } else {}
-  }
-
-  Future<String?> _uploadProfileImage() async {
-    if (_profileImage == null) {
-      return null;
-    }
-
-    try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images/${_emailController.text}.jpg');
-
-      await storageRef.putFile(_profileImage!);
-      String downloadUrl = await storageRef.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      return null;
     }
   }
 
@@ -94,36 +77,40 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
+      // Registrasi pengguna
+      UserCredential? userCredential = await _firebaseHelper.registerUser(
+          _emailController.text, _passwordController.text);
 
-      String? profileImageUrl = await _uploadProfileImage();
+      if (userCredential != null) {
+        // Upload gambar profil jika ada
+        String? profileImageUrl = await _firebaseHelper.uploadProfileImage(
+            _profileImage, _emailController.text);
 
-      await FirebaseFirestore.instance
-          .collection('user_data')
-          .doc(userCredential.user!.uid)
-          .set({
-        'user_email': _emailController.text,
-        'full_name': _fullNameController.text,
-        'username': _usernameController.text,
-        'date_of_birth': _selectedDate?.toIso8601String(),
-        'profile_image': profileImageUrl,
-      });
+        // Simpan data pengguna ke Firestore
+        await _firebaseHelper.saveUserData(
+          userCredential.user!.uid,
+          _emailController.text,
+          _fullNameController.text,
+          _usernameController.text,
+          _selectedDate,
+          profileImageUrl,
+        );
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
+        // Menyimpan status login
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const NavigationPage()),
-        (Route<dynamic> route) => false,
-      );
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const NavigationPage()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Registrasi gagal. Silakan coba lagi.')));
+      }
     } catch (e) {
-      String errorMessage = 'Registrasi gagal. Silakan coba lagi.';
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(errorMessage)));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Registrasi gagal. Silakan coba lagi.')));
     } finally {
       setState(() {
         _isLoading = false;
@@ -267,45 +254,44 @@ class _RegisterPageState extends State<RegisterPage> {
                             obscureText: _obscureText,
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 16),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedDate == null
+                          GestureDetector(
+                            onTap: () => _selectDate(context),
+                            child: AbsorbPointer(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: _selectedDate == null
                                       ? 'Tanggal Lahir'
-                                      : 'Tanggal Lahir: ${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.black54),
+                                      : _selectedDate
+                                          ?.toLocal()
+                                          .toString()
+                                          .split(' ')[0],
+                                  border: const OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  suffixIcon: const Icon(Icons.calendar_today),
                                 ),
-                                IconButton(
-                                  icon: const Icon(Icons.calendar_today),
-                                  onPressed: () => _selectDate(context),
-                                ),
-                              ],
+                              ),
                             ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: _isLoading ? null : _register,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              backgroundColor: Colors.blue.shade800,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator()
+                                : const Text('Daftar'),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  _isLoading
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: _register,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 100, vertical: 16),
-                          ),
-                          child: const Text('Daftar'),
-                        ),
                 ],
               ),
             ),

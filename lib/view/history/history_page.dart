@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/firebase_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -11,6 +11,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   List<Map<String, dynamic>> purchaseHistory = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -19,11 +20,18 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<void> _loadPurchaseHistory() async {
-    List<Map<String, dynamic>> history =
-        await DatabaseHelper().getPurchaseHistory();
-    setState(() {
-      purchaseHistory = history;
-    });
+    try {
+      List<Map<String, dynamic>> history =
+          await FirebaseHelper().getPurchaseHistory();
+      setState(() {
+        purchaseHistory = history;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -32,63 +40,67 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         title: const Text('Riwayat Pembelian'),
       ),
-      body: purchaseHistory.isEmpty
-          ? const Center(child: Text('Belum ada riwayat pembelian.'))
-          : ListView.builder(
-              itemCount: purchaseHistory.length,
-              itemBuilder: (context, index) {
-                final item = purchaseHistory[index];
-                return Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16.0),
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        item['image'],
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : purchaseHistory.isEmpty
+              ? const Center(child: Text('Belum ada riwayat pembelian.'))
+              : ListView.builder(
+                  itemCount: purchaseHistory.length,
+                  itemBuilder: (context, index) {
+                    final item = purchaseHistory[index];
+                    return Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    title: Text(
-                      item['product_name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          'Jumlah: ${item['quantity']}',
-                          style: const TextStyle(fontSize: 16),
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16.0),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.asset(
+                            item['image'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        Text(
-                          'Total: ${Helper.formatCurrency(item['total_price'])}',
+                        title: Text(
+                          item['product_name'],
                           style: const TextStyle(
-                              fontSize: 16, color: Colors.green),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
-                        Text(
-                          'Tanggal: ${Helper.formatDate(item['purchase_date'])}',
-                          style: const TextStyle(fontSize: 14),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              'Jumlah: ${item['quantity']}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              'Total: ${Helper.formatCurrency(item['total_price'])}',
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.green),
+                            ),
+                            Text(
+                              'Tanggal: ${Helper.formatDate(item['purchase_date'])}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            Text(
+                              'Metode Pembayaran: ${item['payment_method']}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Metode Pembayaran: ${item['payment_method']}',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }

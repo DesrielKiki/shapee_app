@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shapee_app/database/helper/database_helper.dart';
+import 'package:shapee_app/database/helper/firebase_helper.dart';
 import 'package:shapee_app/database/helper/helper.dart';
 import 'package:shapee_app/navigation/navigation_page.dart';
 
@@ -8,7 +8,7 @@ class PaymentPage extends StatefulWidget {
   final double price;
   final List<String> images;
   final int quantity;
-  final int? cartItemId;
+  final String? cartItemId;
 
   const PaymentPage({
     super.key,
@@ -244,16 +244,23 @@ class _PaymentPageState extends State<PaymentPage> {
           child: ElevatedButton(
             onPressed: () async {
               if (selectedPaymentMethod != null) {
-                await DatabaseHelper().confirmPayment(
-                  productName: widget.name,
-                  quantity: widget.quantity,
-                  totalPrice: totalPrice,
-                  image: widget.images.isNotEmpty ? widget.images[0] : '',
-                  paymentMethod: selectedPaymentMethod!,
+                Map<String, dynamic> purchaseHistory = {
+                  'product_name': widget.name,
+                  'quantity': widget.quantity,
+                  'total_price': totalPrice,
+                  'image': widget.images.isNotEmpty ? widget.images[0] : '',
+                  'payment_method': selectedPaymentMethod!,
+                  'purchase_date': DateTime.now().toIso8601String(),
+                };
+                await FirebaseHelper().insertPurchaseHistory(purchaseHistory);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Pembayaran berhasil.'),
+                  ),
                 );
 
                 if (widget.cartItemId != null) {
-                  await DatabaseHelper().deleteCartItem(widget.cartItemId!);
+                  await FirebaseHelper().deleteCartItem(widget.cartItemId!);
                 }
 
                 Navigator.of(context).pushAndRemoveUntil(

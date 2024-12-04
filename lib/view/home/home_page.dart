@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               hintStyle: TextStyle(color: ColorConfig.labelColor),
               contentPadding: EdgeInsets.only(left: -10, top: 10, bottom: 9),
             ),
-            style: const TextStyle(color: ColorConfig.secondaryColor),
+            style: const TextStyle(color: ColorConfig.labelColor),
           ),
         ),
         backgroundColor: ColorConfig.primaryColor,

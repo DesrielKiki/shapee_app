@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: slash_for_doc_comments
 
 import 'package:sqflite/sqflite.dart';
@@ -93,7 +91,7 @@ class DatabaseHelper {
     return await db.query('cart');
   }
 
-  Future<void> deleteCartItem(int id) async {
+  Future<void> deleteCartItem(String id) async {
     final db = await database;
     await db.delete('cart', where: 'id = ?', whereArgs: [id]);
   }
@@ -170,7 +168,6 @@ class DatabaseHelper {
    * Purchase History Data Methods
    */
 
-  
   Future<void> insertPurchaseHistory(Map<String, dynamic> purchase) async {
     final db = await database;
     await db.insert(
